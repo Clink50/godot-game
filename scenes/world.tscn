@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://cmecgrhoycd28"]
+
+[ext_resource type="PackedScene" uid="uid://bb0v5fnxlvapb" path="res://scenes/player.tscn" id="1_jr77e"]
+[ext_resource type="PackedScene" uid="uid://cvvf6rt75h0yu" path="res://scenes/map.tscn" id="1_sy2ij"]
+[ext_resource type="PackedScene" uid="uid://bqkde6o6xgl7e" path="res://scenes/orc.tscn" id="2_swde4"]
+[ext_resource type="PackedScene" uid="uid://cksy3iwxk30yw" path="res://scenes/robot.tscn" id="4_tm8oe"]
+
+[node name="World" type="Node2D"]
+
+[node name="Map" parent="." instance=ExtResource("1_sy2ij")]
+
+[node name="Player" parent="." instance=ExtResource("1_jr77e")]
+
+[node name="Enemy" parent="." instance=ExtResource("2_swde4")]
+scale = Vector2(-1, 1)
+
+[node name="Robot" parent="." instance=ExtResource("4_tm8oe")]
+position = Vector2(321.25, 93)
+
+[node name="Camera2D" type="Camera2D" parent="Robot"]
