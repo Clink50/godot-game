@@ -14,12 +14,19 @@ config/name="Test RPG"
 run/main_scene="res://scenes/world.tscn"
 config/features=PackedStringArray("4.3", "C#", "Forward Plus")
 config/icon="res://icon.svg"
+config/size/mode=0
+config/size/window_height_override=720
+config/size/window_width_override=1280
+config/size/viewport_height=180
+config/size/viewport_width=360
 
 [display]
 
-window/size/viewport_width=640
-window/size/viewport_height=360
-window/stretch/mode="viewport"
+window/size/viewport_width=360
+window/size/viewport_height=180
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/stretch/mode="canvas_items"
 window/stretch/scale_mode="integer"
 
 [dotnet]
@@ -70,3 +77,7 @@ rangeAttack={
 "events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":2,"position":Vector2(167, 20),"global_position":Vector2(176, 66),"factor":1.0,"button_index":2,"canceled":false,"pressed":true,"double_click":false,"script":null)
 ]
 }
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0
