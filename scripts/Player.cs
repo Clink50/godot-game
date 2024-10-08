@@ -2,79 +2,66 @@ using Godot;
 
 public partial class Player : CharacterBody2D
 {
-	[Export] private float _speed = 150;
-    [Export] private float _jumpForce = 500;
-    [Export] private float _gravity = 20;
-
-	private AnimationPlayer _animationPlayer;
+	[Export] private float _speed = 150.0f;
+	[Export] private float _speedMultiplier = 1;
 	private Sprite2D _playerSprite;
+	private AnimationPlayer _animationPlayer;
+	private string _previousDirection;
+
+	[Signal]
+	public delegate void PositionChangedEventHandler(string position);
 
 	public override void _Ready()
 	{
 		_playerSprite = GetNode<Sprite2D>("Sprite2D");
 		_animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-		_animationPlayer.Play("idle");
 	}
 
-	public float GetInput()
+	public override void _PhysicsProcess(double delta)
 	{
-		var velocity = Velocity; // Set the current velocity of the player
-		velocity.X = 0; // Reset the velocity
+		var horizontalDirection = Input.GetAxis("left", "right");
+		var verticalDirection = Input.GetAxis("up", "down");
 
-		// Get the input
-		var horizontalDirection = Input.GetAxis("ui_left", "ui_right");
-		var jump = Input.IsActionPressed("ui_select");
-		var attack = Input.IsActionJustPressed("primaryAttack");
+		_speedMultiplier = Input.IsActionPressed("run") ? 2 : 1;
 
-		if (IsOnFloor() && jump)
+		Vector2 velocity = new Vector2(horizontalDirection, verticalDirection).Normalized();
+
+		if (horizontalDirection != 0 || verticalDirection != 0)
 		{
-			velocity.Y = -_jumpForce;
-		}
+			// Moving right
+			_playerSprite.FlipH = horizontalDirection < 0;
+			_animationPlayer.Play("sideWalk");
 
-		velocity.X = _speed * horizontalDirection;
-
-		if (horizontalDirection != 0)
-		{
-			_playerSprite.FlipH = horizontalDirection == -1;
-		}
-
-		Velocity = velocity;
-
-		return horizontalDirection;
-	}
-
-    public override void _PhysicsProcess(double delta)
-    {
-		if (!IsOnFloor())
-		{
-			var velocity = Velocity;
-			velocity.Y += _gravity;
-
-			// Limit the gravity
-			if (velocity.Y > 1000)
+			var currentDirection = GetPlayerDirection(horizontalDirection, verticalDirection);
+			if (_previousDirection != currentDirection)
 			{
-				velocity.Y = 1000;
+				_previousDirection = currentDirection;
+				EmitSignal(SignalName.PositionChanged, currentDirection);
 			}
-
-			Velocity = velocity;
-		}
-
-		var horizontalDirection = GetInput();
-
-		MoveAndSlide();
-
-		UpdateAnimations(horizontalDirection);
-    }
-
-	public void UpdateAnimations(float horizontalDirection)
-	{
-		if (IsOnFloor() && horizontalDirection == 0)
-		{
-			_animationPlayer.Play("idle");
 		}
 		else
 		{
-			_animationPlayer.Play("walk");
+			// Idle
+			_animationPlayer.Stop();
 		}
+
+		Velocity = velocity * _speed * _speedMultiplier;
+		MoveAndSlide();
+	}
+
+	private static string GetPlayerDirection(float horizontalDirection, float verticalDirection)
+	{
+		return true switch
+		{
+			var _ when horizontalDirection > 0 && verticalDirection == 0 => "right",
+			var _ when horizontalDirection < 0 && verticalDirection == 0 => "left",
+			var _ when horizontalDirection == 0 && verticalDirection > 0 => "down",
+			var _ when horizontalDirection == 0 && verticalDirection < 0 => "up",
+			var _ when horizontalDirection > 0 && verticalDirection < 0 => "topRight",
+			var _ when horizontalDirection < 0 && verticalDirection < 0 => "topLeft",
+			var _ when horizontalDirection > 0 && verticalDirection > 0 => "bottomRight",
+			var _ when horizontalDirection < 0 && verticalDirection > 0 => "bottomLeft",
+			_ => "idle",
+		};
 	}
 }
