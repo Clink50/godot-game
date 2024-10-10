@@ -9,7 +9,7 @@ public partial class Player : CharacterBody2D
 	private string _previousDirection;
 
 	[Signal]
-	public delegate void PositionChangedEventHandler(string position);
+	public delegate void PositionChangedEventHandler(Vector2 position);
 
 	public override void _Ready()
 	{
@@ -36,7 +36,7 @@ public partial class Player : CharacterBody2D
 			if (_previousDirection != currentDirection)
 			{
 				_previousDirection = currentDirection;
-				EmitSignal(SignalName.PositionChanged, currentDirection);
+				EmitSignal(SignalName.PositionChanged, Position);
 			}
 		}
 		else

@@ -1,0 +1,46 @@
+[gd_scene load_steps=6 format=3 uid="uid://cgkc1o4i84wbr"]
+
+[ext_resource type="Texture2D" uid="uid://bc1wl5ksomgjq" path="res://art/map/tilemap1.png" id="1_tvkg4"]
+[ext_resource type="PackedScene" uid="uid://clsmmbrvvlpvl" path="res://scenes/HealthComponent.tscn" id="2_ka435"]
+[ext_resource type="PackedScene" uid="uid://clld82eq1bdn8" path="res://scenes/HitboxComponent.tscn" id="3_4n7vt"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qabae"]
+radius = 5.81348
+height = 27.5933
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lehw0"]
+size = Vector2(47, 59.5)
+
+[node name="OakTree" type="StaticBody2D"]
+y_sort_enabled = true
+collision_layer = 16
+collision_mask = 0
+
+[node name="Hitbox" type="CollisionShape2D" parent="."]
+z_index = -1
+position = Vector2(-1.28976, 24.8032)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_qabae")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+y_sort_enabled = true
+position = Vector2(0, 20)
+texture = ExtResource("1_tvkg4")
+offset = Vector2(0, -20)
+region_enabled = true
+region_rect = Rect2(241, 100, 47, 63)
+
+[node name="HealthComponent" parent="." instance=ExtResource("2_ka435")]
+MAX_HEALTH = 30.0
+
+[node name="HitboxComponent" parent="." node_paths=PackedStringArray("_healthComponent") instance=ExtResource("3_4n7vt")]
+position = Vector2(-0.0992126, 25.9937)
+collision_layer = 18
+collision_mask = 18
+_healthComponent = NodePath("../HealthComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
+position = Vector2(0.123457, -27.6992)
+shape = SubResource("RectangleShape2D_lehw0")
+
+[connection signal="area_entered" from="HitboxComponent" to="HitboxComponent" method="OnAreaEntered"]

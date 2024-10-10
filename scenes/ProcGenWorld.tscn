@@ -1,0 +1,59 @@
+[gd_scene load_steps=10 format=3 uid="uid://bb6ygkykh10ef"]
+
+[ext_resource type="Script" path="res://scripts/ProcGenWorld.cs" id="1_ssb2f"]
+[ext_resource type="PackedScene" uid="uid://cgkc1o4i84wbr" path="res://scenes/OakTree.tscn" id="2_h3eol"]
+[ext_resource type="TileSet" uid="uid://cycyppughkkij" path="res://art/tilesets/new_tile_set.tres" id="2_u8ct8"]
+[ext_resource type="PackedScene" uid="uid://bwccokr3x3o7k" path="res://scenes/Player.tscn" id="3_0k8sl"]
+[ext_resource type="PackedScene" uid="uid://bqkde6o6xgl7e" path="res://scenes/Orc.tscn" id="4_o7a3y"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_025sj"]
+noise_type = 0
+cellular_distance_function = 3
+cellular_jitter = -4.105
+cellular_return_type = 3
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_15gh7"]
+noise = SubResource("FastNoiseLite_025sj")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_x5hvi"]
+noise_type = 0
+frequency = 0.3513
+fractal_octaves = 1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_60m8i"]
+noise = SubResource("FastNoiseLite_x5hvi")
+
+[node name="ProcGenWorld" type="Node2D"]
+y_sort_enabled = true
+position = Vector2(-4, 0)
+script = ExtResource("1_ssb2f")
+_noiseHeightTexture = SubResource("NoiseTexture2D_15gh7")
+_noiseEnvironmentTexture = SubResource("NoiseTexture2D_60m8i")
+_oakTreeScene = ExtResource("2_h3eol")
+
+[node name="Water" type="TileMapLayer" parent="."]
+z_index = -1
+tile_set = ExtResource("2_u8ct8")
+
+[node name="Ground1" type="TileMapLayer" parent="."]
+z_index = -1
+tile_set = ExtResource("2_u8ct8")
+
+[node name="Ground2" type="TileMapLayer" parent="."]
+z_index = -1
+tile_set = ExtResource("2_u8ct8")
+
+[node name="Cliff" type="TileMapLayer" parent="."]
+y_sort_enabled = true
+tile_set = ExtResource("2_u8ct8")
+
+[node name="Environment" type="TileMapLayer" parent="."]
+y_sort_enabled = true
+tile_set = ExtResource("2_u8ct8")
+
+[node name="Player" parent="." instance=ExtResource("3_0k8sl")]
+position = Vector2(124, 112)
+
+[node name="Enemy" parent="." instance=ExtResource("4_o7a3y")]
+position = Vector2(268, 112)
+scale = Vector2(1.25, 1.25)
