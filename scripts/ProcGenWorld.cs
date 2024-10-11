@@ -87,18 +87,12 @@ public partial class ProcGenWorld : Node2D
 
 	private void GenerateWorld()
 	{
-		var noises = new List<float>();
-		var environmentNoises = new List<float>();
-
 		for (int x = -_width / 2; x < _width / 2; x++)
 		{
 			for (int y = -_height / 2; y < _height / 2; y++)
 			{
 				var noiseValue = _noise.GetNoise2D(x, y);
 				var environmentNoiseValue = _environmentNoise.GetNoise2D(x, y);
-
-				noises.Add(noiseValue);
-				environmentNoises.Add(noiseValue);
 
 				if (noiseValue > 0.6f)
 				{
@@ -146,10 +140,6 @@ public partial class ProcGenWorld : Node2D
 		_ground1Layer.SetCellsTerrainConnect(_sandTiles, _sandTerrainIndex, 0);
 		_ground1Layer.SetCellsTerrainConnect(_grassTiles, _grassTerrainIndex, 0);
 		_cliffLayer.SetCellsTerrainConnect(_cliffTiles, _cliffTerrainIndex, 0);
-
-
-		GD.Print("Terrain Max: " + noises.Max() + " - Min: " + noises.Min());
-		GD.Print("Environment Max: " + environmentNoises.Max() + " - Min: " + environmentNoises.Min());
 	}
 
 	public override void _Input(InputEvent @event)
