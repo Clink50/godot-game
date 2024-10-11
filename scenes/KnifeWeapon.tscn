@@ -1,17 +1,17 @@
-[gd_scene load_steps=4 format=3 uid="uid://4ugjmypi4qvg"]
+[gd_scene load_steps=5 format=3 uid="uid://4ugjmypi4qvg"]
 
 [ext_resource type="Texture2D" uid="uid://bn8o8uydwji4o" path="res://art/props/weapons.png" id="1_d7obm"]
 [ext_resource type="Script" path="res://scripts/KnifeWeapon.cs" id="1_m7i01"]
+[ext_resource type="PackedScene" uid="uid://clld82eq1bdn8" path="res://scenes/HitboxComponent.tscn" id="3_50anm"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4etg7"]
 radius = 1.09535
 height = 12.2854
 
-[node name="KnifeWeapon" type="RigidBody2D"]
-collision_layer = 18
-collision_mask = 28
-gravity_scale = 0.0
+[node name="KnifeWeapon" type="Node2D"]
+rotation = 0.785398
 script = ExtResource("1_m7i01")
+_throwSpeed = 300.0
 metadata/_edit_group_ = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -20,9 +20,18 @@ texture = ExtResource("1_d7obm")
 region_enabled = true
 region_rect = Rect2(5, 100, 23, 24)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="HitboxComponent" parent="." instance=ExtResource("3_50anm")]
+collision_layer = 2
+collision_mask = 28
+
+[node name="Collider" type="CollisionShape2D" parent="HitboxComponent"]
 position = Vector2(1.75, -1.5)
 rotation = 0.785398
 shape = SubResource("CapsuleShape2D_4etg7")
 
-[connection signal="body_entered" from="." to="." method="OnHitboxComponentAreaEntered"]
+[node name="DespawnTimer" type="Timer" parent="."]
+wait_time = 4.0
+autostart = true
+
+[connection signal="area_entered" from="HitboxComponent" to="." method="OnHitboxAreaEntered"]
+[connection signal="timeout" from="DespawnTimer" to="." method="OnDespawnTimerTimeout"]

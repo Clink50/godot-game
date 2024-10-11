@@ -23,13 +23,13 @@ fractal_octaves = 1
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_60m8i"]
 noise = SubResource("FastNoiseLite_x5hvi")
 
-[node name="ProcGenWorld" type="Node2D"]
+[node name="ProcGenWorld" type="Node2D" node_paths=PackedStringArray("_player")]
 y_sort_enabled = true
-position = Vector2(-4, 0)
 script = ExtResource("1_ssb2f")
 _noiseHeightTexture = SubResource("NoiseTexture2D_15gh7")
 _noiseEnvironmentTexture = SubResource("NoiseTexture2D_60m8i")
 _oakTreeScene = ExtResource("2_h3eol")
+_player = NodePath("Player")
 
 [node name="Water" type="TileMapLayer" parent="."]
 z_index = -1
@@ -52,8 +52,7 @@ y_sort_enabled = true
 tile_set = ExtResource("2_u8ct8")
 
 [node name="Player" parent="." instance=ExtResource("3_0k8sl")]
-position = Vector2(124, 112)
 
 [node name="Enemy" parent="." instance=ExtResource("4_o7a3y")]
-position = Vector2(268, 112)
+position = Vector2(260, 0)
 scale = Vector2(1.25, 1.25)

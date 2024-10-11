@@ -9,9 +9,4 @@ public partial class HitboxComponent : Area2D
 	{
 		_healthComponent.Damage(damage);
 	}
-
-	public void OnAreaEntered(Area2D area)
-    {
-        GD.Print("Area hit by: " + area.Name);  // Prints the name of the object that hit the tree
-    }
 }

@@ -13,21 +13,25 @@ public partial class ProcGenWorld : Node2D
 	private NoiseTexture2D _noiseEnvironmentTexture; // Environment / Trees
 	private Noise _environmentNoise;
 
+	[Export]
+	private PackedScene _oakTreeScene;
+
+	[Export]
+	private Player _player;
+
 	private TileMapLayer _waterLayer;
 	private TileMapLayer _ground1Layer;
 	private TileMapLayer _ground2Layer;
 	private TileMapLayer _cliffLayer;
 	private TileMapLayer _environmentLayer;
 
-	private Camera2D _camera2d;
-
-	private int _width = 200;
-	private int _height = 200;
+	// Map Grid
+	private int _width = 50;
+	private int _height = 50;
 
 	private int _sourceId = 1;
 	private Vector2I _waterAtlas = new(0, 1);
 	private Vector2I _landAtlas = new(0, 0);
-
 	private Array<Vector2I> _sandTiles = new();
 	private Array<Vector2I> _grassTiles = new();
 	private Array<Vector2I> _cliffTiles = new();
@@ -49,13 +53,6 @@ public partial class ProcGenWorld : Node2D
 		new Vector2I(12, 2),
 		new Vector2I(15, 2),
 	};
-
-	// private Array<Vector2I> _oakTreeAtlas = new()
-	// {
-	// 	new Vector2I(15, 6),
-	// };
-	[Export]
-	private PackedScene _oakTreeScene;
 
 	public override void _Ready()
 	{
@@ -83,14 +80,13 @@ public partial class ProcGenWorld : Node2D
 		_cliffLayer = GetNode<TileMapLayer>("Cliff");
 		_environmentLayer = GetNode<TileMapLayer>("Environment");
 
-		_camera2d = GetNode<Camera2D>("Player/Camera2D");
+		_player = GetNode<Player>("Player");
 
 		GenerateWorld();
 	}
 
 	private void GenerateWorld()
 	{
-		var treeCount = 0;
 		var noises = new List<float>();
 		var environmentNoises = new List<float>();
 
@@ -120,14 +116,13 @@ public partial class ProcGenWorld : Node2D
 						_ground2Layer.SetCell(new Vector2I(x, y), _sourceId, _grassAtlasTiles.PickRandom());
 					}
 
-					if (environmentNoiseValue > 0.9f && noiseValue > 0.3f && noiseValue < 0.5f && treeCount < 6)
+					if (environmentNoiseValue > 0.9f && noiseValue > 0.3f && noiseValue < 0.5f)
 					{
 						// _environmentLayer.SetCell(new Vector2I(x, y), _sourceId, _oakTreeAtlas.PickRandom());
 						// Instantiate an oak tree
 						var oakTreeInstance = (Node2D)_oakTreeScene.Instantiate();
 						AddChild(oakTreeInstance);
 						oakTreeInstance.GlobalPosition = new Vector2(x, y) * _environmentLayer.TileSet.TileSize;
-						treeCount++;
 					}
 				}
 
@@ -159,20 +154,21 @@ public partial class ProcGenWorld : Node2D
 
 	public override void _Input(InputEvent @event)
 	{
+		var camera2d = _player.GetNode<Camera2D>("Camera2D");
 		if (Input.IsActionJustPressed("zoomIn"))
 		{
-			var zoomValue = (float)(_camera2d.Zoom.X + 0.1);
-			_camera2d.Zoom = new Vector2(zoomValue, zoomValue);
+			var zoomValue = (float)(camera2d.Zoom.X + 0.1);
+			camera2d.Zoom = new Vector2(zoomValue, zoomValue);
 		}
 		else if (Input.IsActionJustPressed("zoomOut"))
 		{
-			var zoomValue = (float)(_camera2d.Zoom.X - 0.1);
+			var zoomValue = (float)(camera2d.Zoom.X - 0.1);
 			if (zoomValue == 0)
 			{
-				zoomValue = (float)(_camera2d.Zoom.X - 0.2);
+				zoomValue = (float)(camera2d.Zoom.X - 0.2);
 			}
 
-			_camera2d.Zoom = new Vector2(zoomValue, zoomValue);
+			camera2d.Zoom = new Vector2(zoomValue, zoomValue);
 		}
 	}
 }

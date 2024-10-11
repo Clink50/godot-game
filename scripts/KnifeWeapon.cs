@@ -1,14 +1,34 @@
 using Godot;
 
-public partial class KnifeWeapon : RigidBody2D
+public partial class KnifeWeapon : Node2D
 {
-	public void _PhysicsProcess()
+    [Export] private float _throwSpeed = 400f; // Speed at which the knife moves
+
+	private Vector2 _throwDirection;
+    private Vector2 _velocity;
+
+    public override void _Process(double delta)
+    {
+        // Move the knife based on the velocitay
+        Position += _velocity * (float)delta;
+    }
+
+	public void OnDespawnTimerTimeout()
 	{
-		ApplyImpulse(Vector2.Zero, new Vector2(300, 0));
+		QueueFree();
 	}
 
-	public void OnHitboxComponentAreaEntered(Node body)
-    {
-        GD.Print("Weapon hit by: " + body.Name);  // Prints the name of the body that was hit
-    }
+	public void OnHitboxAreaEntered(Area2D area)
+	{
+		if (area is HitboxComponent hitboxComponent)
+		{
+			hitboxComponent.Damage(10);
+			QueueFree();
+		}
+	}
+
+	public void SetDirection(Vector2 direction)
+	{
+		_velocity = direction.Normalized() * _throwSpeed;
+	}
 }

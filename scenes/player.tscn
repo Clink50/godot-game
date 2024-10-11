@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://bwccokr3x3o7k"]
+[gd_scene load_steps=8 format=3 uid="uid://bwccokr3x3o7k"]
 
 [ext_resource type="Texture2D" uid="uid://d1yqhgs48c74r" path="res://art/characters/players/main.png" id="1_gwkok"]
 [ext_resource type="Script" path="res://scripts/Player.cs" id="1_ywism"]
+[ext_resource type="PackedScene" uid="uid://4ugjmypi4qvg" path="res://scenes/KnifeWeapon.tscn" id="3_gdey4"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_stuh4"]
 radius = 2.30634
@@ -124,6 +125,8 @@ motion_mode = 1
 wall_min_slide_angle = 0.174533
 platform_on_leave = 2
 script = ExtResource("1_ywism")
+_knifeScene = ExtResource("3_gdey4")
+metadata/_edit_group_ = true
 
 [node name="Hitbox" type="CollisionShape2D" parent="."]
 z_index = -1
@@ -144,3 +147,8 @@ libraries = {
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(0.5, 0.5)
+
+[node name="KnifeAttackTimer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="timeout" from="KnifeAttackTimer" to="." method="OnAttackTimerTimeout"]
