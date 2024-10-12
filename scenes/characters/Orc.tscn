@@ -2,11 +2,11 @@
 
 [ext_resource type="Texture2D" uid="uid://voeiuxrwxmq2" path="res://art/characters/enemies/orc/Orc/Orc-Walk.png" id="1_ct4xr"]
 [ext_resource type="Texture2D" uid="uid://3grpl2urihm7" path="res://art/characters/enemies/orc/Orc/Orc-Idle.png" id="1_cuem8"]
-[ext_resource type="Script" path="res://scripts/Orc.cs" id="1_uvw01"]
+[ext_resource type="Script" path="res://scripts/characters/Orc.cs" id="1_uvw01"]
 [ext_resource type="Texture2D" uid="uid://b7al6yrg6h8rf" path="res://art/characters/enemies/orc/Orc/Orc-Hurt.png" id="2_6tlve"]
 [ext_resource type="Texture2D" uid="uid://bd7ns1863iie3" path="res://art/characters/enemies/orc/Orc/Orc-Death.png" id="2_b6kwo"]
-[ext_resource type="PackedScene" uid="uid://clsmmbrvvlpvl" path="res://scenes/HealthComponent.tscn" id="6_j12o1"]
-[ext_resource type="PackedScene" uid="uid://clld82eq1bdn8" path="res://scenes/HitboxComponent.tscn" id="7_du2h0"]
+[ext_resource type="PackedScene" uid="uid://clsmmbrvvlpvl" path="res://scenes/components/HealthComponent.tscn" id="6_j12o1"]
+[ext_resource type="PackedScene" uid="uid://clld82eq1bdn8" path="res://scenes/components/HitboxComponent.tscn" id="7_du2h0"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_kqwr1"]
 radius = 2.1282
