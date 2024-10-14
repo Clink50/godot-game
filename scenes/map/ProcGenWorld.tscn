@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cgkc1o4i84wbr" path="res://scenes/map/OakTree.tscn" id="2_h3eol"]
 [ext_resource type="TileSet" uid="uid://cycyppughkkij" path="res://art/tilesets/terrain.tres" id="2_u8ct8"]
 [ext_resource type="PackedScene" uid="uid://bwccokr3x3o7k" path="res://scenes/characters/Player.tscn" id="3_0k8sl"]
-[ext_resource type="PackedScene" uid="uid://bqkde6o6xgl7e" path="res://scenes/characters/Orc.tscn" id="4_o7a3y"]
+[ext_resource type="PackedScene" uid="uid://bqkde6o6xgl7e" path="res://scenes/characters/enemies/Orc.tscn" id="4_o7a3y"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_025sj"]
 noise_type = 0

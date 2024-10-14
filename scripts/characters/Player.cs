@@ -7,20 +7,14 @@ public partial class Player : CharacterBody2D
 	private Sprite2D _playerSprite;
 	private AnimationPlayer _animationPlayer;
 
-	private GarlicController _garlicInstance;
-	private bool _isGarlicSpawned = false;
-	private Timer _garlicTimer;
-
-	public Vector2 velocity;
-	public Vector2 lastVelocity;
+	public Vector2 CurrentVelocity { get; set; }
+	public Vector2 LastVelocity { get; set; } = Vector2.Right;
 
 	public override void _Ready()
 	{
 		_playerSprite = GetNode<Sprite2D>("Sprite2D");
 		_animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-		lastVelocity = Vector2.Right;
-
-		SetWeapon("Garlic");
+		SetupWeaponAttack("Knife");
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -30,22 +24,22 @@ public partial class Player : CharacterBody2D
 		float verticalDirection = Input.GetAxis("up", "down");
 
 		// Calculate and normalize the velocity
-		velocity = new Vector2(horizontalDirection, verticalDirection).Normalized();
+		CurrentVelocity = new Vector2(horizontalDirection, verticalDirection).Normalized();
 
 		// Store the last non-zero velocity component for direction retention
 		if (horizontalDirection != 0)
 		{
-			lastVelocity = new(velocity.X, 0);
+			LastVelocity = new(CurrentVelocity.X, 0);
 		}
 
 		if (verticalDirection != 0)
 		{
-			lastVelocity = new(0, velocity.Y);
+			LastVelocity = new(0, CurrentVelocity.Y);
 		}
 
 		if (horizontalDirection != 0 && verticalDirection != 0)
 		{
-			lastVelocity = new(velocity.X, velocity.Y);
+			LastVelocity = new(CurrentVelocity.X, CurrentVelocity.Y);
 		}
 
 		// Check if the player is moving
@@ -62,86 +56,43 @@ public partial class Player : CharacterBody2D
 		}
 
 		// Apply speed to the movement
-		velocity *= _speed;
+		CurrentVelocity *= _speed;
 
 		// Check if the player is running and apply speed multiplier
 		if (Input.IsActionPressed("run"))
 		{
-			velocity *= _speedMultiplier;
+			CurrentVelocity *= _speedMultiplier;
 		}
 
-		// Set the player's velocity and move
-		Velocity = velocity;
+		// Set the player's CurrentVelocity and move
+		Velocity = CurrentVelocity;
 		MoveAndSlide();
 	}
 
-	private void SetWeapon(string weaponType)
+	private void SetupWeaponAttack(string weaponType)
 	{
+		Timer attackTimer = new()
+		{
+			OneShot = false,
+			Autostart = true,
+		};
+
 		if (weaponType == "Knife")
 		{
-			SetupKnifeAttack();
+			attackTimer.WaitTime = 1f;
 		}
-		else
+		else if (weaponType == "Garlic")
 		{
-			SetupGarlicAttack();
+			attackTimer.WaitTime = 3f;
 		}
+
+		AddChild(attackTimer);
+		attackTimer.Timeout += () => OnAttackTimerTimeout(weaponType);
 	}
 
-	private void SetupKnifeAttack()
+	private void OnAttackTimerTimeout(string weaponType)
 	{
-		Timer knifeAttackTimer = new()
-		{
-			OneShot = false,
-			WaitTime = 1f,
-			Autostart = true,
-		};
-		AddChild(knifeAttackTimer);
-		knifeAttackTimer.Timeout += OnKnifeAttackTimerTimeout;
-	}
-
-	private void OnKnifeAttackTimerTimeout()
-	{
-		var knifeInstance = GD.Load<PackedScene>("res://scenes/weapons/KnifeWeapon.tscn").Instantiate() as KnifeController;
-		knifeInstance.Position = new Vector2(Position.X, Position.Y - 8);
-		knifeInstance.ThrowInDirection(lastVelocity);
-		GetParent().AddChild(knifeInstance);
-	}
-
-	private void SetupGarlicAttack()
-	{
-		_garlicTimer = new()
-		{
-			OneShot = false,
-			WaitTime = 2f, // Set this to 2 seconds
-			Autostart = true,
-		};
-		AddChild(_garlicTimer);
-		_garlicTimer.Timeout += OnGarlicAttackTimerTimeout;
-	}
-
-	private void OnGarlicAttackTimerTimeout()
-	{
-		if (_isGarlicSpawned)
-		{
-			// Despawn the GarlicAttack (QueueFree)
-			if (_garlicInstance != null && IsInstanceValid(_garlicInstance))
-			{
-				_garlicInstance.QueueFree();
-			}
-
-			_isGarlicSpawned = false;
-			// Set timer to wait for 2 seconds before respawning
-			_garlicTimer.WaitTime = 2f;
-		}
-		else
-		{
-			// Spawn the GarlicAttack
-			_garlicInstance = GD.Load<PackedScene>("res://scenes/weapons/GarlicWeapon.tscn").Instantiate() as GarlicController;
-			AddChild(_garlicInstance);
-			_isGarlicSpawned = true;
-
-			// Set timer to wait for 4 seconds before despawning
-			_garlicTimer.WaitTime = 2f;
-		}
+		var weaponInstance = GD.Load<PackedScene>($"res://scenes/weapons/{weaponType}Weapon.tscn").Instantiate() as IBaseWeapon;
+		weaponInstance.Activate(this);
 	}
 }

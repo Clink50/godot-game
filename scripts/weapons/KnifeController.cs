@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class KnifeController : Node2D
+public partial class KnifeController : Node2D, IBaseWeapon
 {
     [Export] private float _throwSpeed = 400f; // Speed at which the knife moves
 	[Export] private int _currentPierce = 2;
@@ -13,6 +13,13 @@ public partial class KnifeController : Node2D
         // Move the knife based on the velocity
         Position += _velocity * (float)delta;
     }
+
+	public void Activate(Player player)
+	{
+		Position = new Vector2(player.Position.X, player.Position.Y - 8);
+		ThrowInDirection(player.LastVelocity);
+		player.GetParent().AddChild(this);
+	}
 
 	// New method to handle knife throw direction and orientation internally
 	public void ThrowInDirection(Vector2 direction)
