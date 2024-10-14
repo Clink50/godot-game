@@ -1,8 +1,8 @@
-using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Godot.Collections;
 
+[Tool]
 public partial class ProcGenWorld : Node2D
 {
 	[Export]
@@ -17,7 +17,7 @@ public partial class ProcGenWorld : Node2D
 	private PackedScene _oakTreeScene;
 
 	[Export]
-	private Player _player;
+	private CharacterBody2D _player;
 
 	private TileMapLayer _waterLayer;
 	private TileMapLayer _ground1Layer;
@@ -80,7 +80,7 @@ public partial class ProcGenWorld : Node2D
 		_cliffLayer = GetNode<TileMapLayer>("Cliff");
 		_environmentLayer = GetNode<TileMapLayer>("Environment");
 
-		_player = GetNode<Player>("Player");
+		_player = GetNode<CharacterBody2D>("Player");
 
 		GenerateWorld();
 	}

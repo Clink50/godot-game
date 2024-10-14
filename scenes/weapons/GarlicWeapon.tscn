@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://cqjhy3iu5dt77"]
+
+[ext_resource type="Script" path="res://scripts/weapons/Garlic.cs" id="1_ogabb"]
+[ext_resource type="Texture2D" uid="uid://bn8o8uydwji4o" path="res://art/props/weapons.png" id="2_0effh"]
+[ext_resource type="PackedScene" uid="uid://clld82eq1bdn8" path="res://scenes/components/HitboxComponent.tscn" id="3_kwemr"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_g2n7d"]
+radius = 18.0278
+
+[node name="GarlicWeapon" type="Node2D"]
+position = Vector2(0, -1)
+script = ExtResource("1_ogabb")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -12)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_0effh")
+region_enabled = true
+region_rect = Rect2(164, 132, 24, 24)
+
+[node name="HitboxComponent" parent="." instance=ExtResource("3_kwemr")]
+collision_layer = 2
+collision_mask = 4
+
+[node name="Collider" type="CollisionShape2D" parent="HitboxComponent"]
+position = Vector2(0, -12)
+shape = SubResource("CircleShape2D_g2n7d")

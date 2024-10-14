@@ -1,13 +1,12 @@
-using System;
 using Godot;
 
 public partial class Player : CharacterBody2D
 {
 	[Export] private float _speed = 150f;
 	[Export] private float _speedMultiplier = 2;
-	[Export] private PackedScene _knifeScene;
 	private Sprite2D _playerSprite;
 	private AnimationPlayer _animationPlayer;
+	private Timer _knifeAttackTimer;
 
 	public Vector2 velocity;
 	public Vector2 lastVelocity;
@@ -17,6 +16,14 @@ public partial class Player : CharacterBody2D
 		_playerSprite = GetNode<Sprite2D>("Sprite2D");
 		_animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 		lastVelocity = Vector2.Right;
+		_knifeAttackTimer = new()
+		{
+			OneShot = false,
+			WaitTime = 1f,
+			Autostart = true,
+		};
+		AddChild(_knifeAttackTimer);
+		_knifeAttackTimer.Timeout += OnAttackTimerTimeout;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -73,65 +80,9 @@ public partial class Player : CharacterBody2D
 
 	public void OnAttackTimerTimeout()
 	{
-		var knifeInstance = (KnifeWeapon)_knifeScene.Instantiate();
+		var knifeInstance = GD.Load<PackedScene>("res://scenes/weapons/KnifeWeapon.tscn").Instantiate() as KnifeController;
 		knifeInstance.Position = new Vector2(Position.X, Position.Y - 8);
-		SetKnifeOrientation(knifeInstance);
-		knifeInstance.SetDirection(lastVelocity);
+		knifeInstance.ThrowInDirection(lastVelocity);
 		GetParent().AddChild(knifeInstance);
-	}
-
-	public void SetKnifeOrientation(KnifeWeapon knife)
-	{
-		var scale = knife.Scale;
-		var rotation = knife.RotationDegrees;
-
-		switch (GetPlayerDirection())
-		{
-			case "left":
-				scale.X *= -1;
-				scale.Y *= -1;
-				break;
-			case "up":
-				scale.X *= -1;
-				break;
-			case "down":
-				scale.Y *= -1;
-				break;
-			case "topLeft":
-				rotation = -90f;
-				break;
-			case "topRight":
-				rotation = 0f;
-				break;
-			case "bottomLeft":
-				rotation = 0f;
-				scale.X *= -1;
-				scale.Y *= -1;
-				break;
-			case "bottomRight":
-				rotation = -90f;
-				scale.X *= -1;
-				scale.Y *= -1;
-				break;
-		}
-
-		knife.Scale = scale;
-		knife.RotationDegrees = rotation;
-	}
-
-	public string GetPlayerDirection()
-	{
-		return true switch
-		{
-			var _ when lastVelocity.X > 0 && lastVelocity.Y == 0 => "right",
-			var _ when lastVelocity.X < 0 && lastVelocity.Y == 0 => "left",
-			var _ when lastVelocity.X == 0 && lastVelocity.Y > 0 => "down",
-			var _ when lastVelocity.X == 0 && lastVelocity.Y < 0 => "up",
-			var _ when lastVelocity.X > 0 && lastVelocity.Y < 0 => "topRight",
-			var _ when lastVelocity.X < 0 && lastVelocity.Y < 0 => "topLeft",
-			var _ when lastVelocity.X > 0 && lastVelocity.Y > 0 => "bottomRight",
-			var _ when lastVelocity.X < 0 && lastVelocity.Y > 0 => "bottomLeft",
-			_ => "idle",
-		};
 	}
 }
