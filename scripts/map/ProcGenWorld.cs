@@ -21,8 +21,8 @@ public partial class ProcGenWorld : Node2D
 
 	private TileMapLayer _waterLayer;
 	private TileMapLayer _ground1Layer;
-	private TileMapLayer _ground2Layer;
-	private TileMapLayer _cliffLayer;
+	// private TileMapLayer _ground2Layer;
+	// private TileMapLayer _cliffLayer;
 	private TileMapLayer _environmentLayer;
 
 	// Map Grid
@@ -34,10 +34,10 @@ public partial class ProcGenWorld : Node2D
 	private Vector2I _landAtlas = new(0, 0);
 	private Array<Vector2I> _sandTiles = new();
 	private Array<Vector2I> _grassTiles = new();
-	private Array<Vector2I> _cliffTiles = new();
+	// private Array<Vector2I> _cliffTiles = new();
 	private int _sandTerrainIndex = 0;
 	private int _grassTerrainIndex = 1;
-	private int _cliffTerrainIndex = 3;
+	// private int _cliffTerrainIndex = 3;
 
 	private Array<Vector2I> _grassAtlasTiles = new()
 	{
@@ -75,9 +75,9 @@ public partial class ProcGenWorld : Node2D
 		_environmentNoise = _noiseEnvironmentTexture.GetNoise();
 
 		_waterLayer = GetNode<TileMapLayer>("Water");
-		_ground1Layer = GetNode<TileMapLayer>("Ground1");
-		_ground2Layer = GetNode<TileMapLayer>("Ground2");
-		_cliffLayer = GetNode<TileMapLayer>("Cliff");
+		_ground1Layer = GetNode<TileMapLayer>("Ground");
+		// _ground2Layer = GetNode<TileMapLayer>("Ground2");
+		// _cliffLayer = GetNode<TileMapLayer>("Cliff");
 		_environmentLayer = GetNode<TileMapLayer>("Environment");
 
 		_player = GetNode<CharacterBody2D>("Player");
@@ -94,21 +94,21 @@ public partial class ProcGenWorld : Node2D
 				var noiseValue = _noise.GetNoise2D(x, y);
 				var environmentNoiseValue = _environmentNoise.GetNoise2D(x, y);
 
-				if (noiseValue > 0.6f)
-				{
-					_cliffTiles.Add(new Vector2I(x, y));
-				}
+				// if (noiseValue > 0.6f)
+				// {
+				// 	_cliffTiles.Add(new Vector2I(x, y));
+				// }
 
 				// Placing all grass
 				if (noiseValue > 0.2f)
 				{
 					_grassTiles.Add(new Vector2I(x, y));
 
-					if (noiseValue > 0.3f)
-					{
-						// Place random grass
-						_ground2Layer.SetCell(new Vector2I(x, y), _sourceId, _grassAtlasTiles.PickRandom());
-					}
+					// if (noiseValue > 0.3f)
+					// {
+					// 	// Place random grass
+					// 	_ground2Layer.SetCell(new Vector2I(x, y), _sourceId, _grassAtlasTiles.PickRandom());
+					// }
 
 					if (environmentNoiseValue > 0.9f && noiseValue > 0.3f && noiseValue < 0.5f)
 					{
@@ -139,7 +139,7 @@ public partial class ProcGenWorld : Node2D
 
 		_ground1Layer.SetCellsTerrainConnect(_sandTiles, _sandTerrainIndex, 0);
 		_ground1Layer.SetCellsTerrainConnect(_grassTiles, _grassTerrainIndex, 0);
-		_cliffLayer.SetCellsTerrainConnect(_cliffTiles, _cliffTerrainIndex, 0);
+		// _cliffLayer.SetCellsTerrainConnect(_cliffTiles, _cliffTerrainIndex, 0);
 	}
 
 	public override void _Input(InputEvent @event)

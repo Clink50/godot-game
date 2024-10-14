@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://cqjhy3iu5dt77"]
 
-[ext_resource type="Script" path="res://scripts/weapons/Garlic.cs" id="1_ogabb"]
+[ext_resource type="Script" path="res://scripts/weapons/GarlicController.cs" id="1_ogabb"]
 [ext_resource type="Texture2D" uid="uid://bn8o8uydwji4o" path="res://art/props/weapons.png" id="2_0effh"]
 [ext_resource type="PackedScene" uid="uid://clld82eq1bdn8" path="res://scenes/components/HitboxComponent.tscn" id="3_kwemr"]
 
