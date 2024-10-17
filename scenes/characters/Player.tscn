@@ -3,9 +3,9 @@
 [ext_resource type="Texture2D" uid="uid://d1yqhgs48c74r" path="res://art/characters/players/main.png" id="1_gwkok"]
 [ext_resource type="Script" path="res://scripts/characters/Player.cs" id="1_ywism"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_stuh4"]
-radius = 2.30634
-height = 15.2688
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2wrhb"]
+radius = 1.21967
+height = 13.5579
 
 [sub_resource type="Animation" id="Animation_feh4g"]
 length = 0.001
@@ -120,15 +120,13 @@ _data = {
 
 [node name="Player" type="CharacterBody2D"]
 y_sort_enabled = true
-collision_mask = 28
+collision_mask = 6
 motion_mode = 1
 wall_min_slide_angle = 0.174533
 platform_on_leave = 2
 script = ExtResource("1_ywism")
-metadata/_edit_group_ = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-z_index = 1
 position = Vector2(0, -11)
 texture = ExtResource("1_gwkok")
 hframes = 8
@@ -136,9 +134,9 @@ vframes = 8
 frame = 48
 
 [node name="Hitbox" type="CollisionShape2D" parent="."]
-z_index = -1
+position = Vector2(0, -0.75)
 rotation = 1.5708
-shape = SubResource("CapsuleShape2D_stuh4")
+shape = SubResource("CapsuleShape2D_2wrhb")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

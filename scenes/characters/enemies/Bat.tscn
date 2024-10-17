@@ -1,8 +1,74 @@
-[gd_scene load_steps=2 format=3 uid="uid://10rfc40h71xu"]
+[gd_scene load_steps=12 format=3 uid="uid://10rfc40h71xu"]
+
+[ext_resource type="Script" path="res://scripts/characters/enemies/Bat.cs" id="1_sn0de"]
+[ext_resource type="Texture2D" uid="uid://dn238tm2kfd3v" path="res://art/characters/enemies/bat.png" id="1_uei8r"]
+[ext_resource type="PackedScene" uid="uid://clld82eq1bdn8" path="res://scenes/components/HitboxComponent.tscn" id="2_6n4j3"]
+[ext_resource type="Script" path="res://scripts/resources/enemies/EnemyResource.cs" id="2_t75ng"]
+[ext_resource type="PackedScene" uid="uid://clsmmbrvvlpvl" path="res://scenes/components/HealthComponent.tscn" id="4_166w4"]
+
+[sub_resource type="Resource" id="Resource_i652w"]
+script = ExtResource("2_t75ng")
+Speed = 50.0
+MaxHealth = 30.0
+Damage = 10.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dh4qr"]
+size = Vector2(24.9631, 20.037)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ked0d"]
+atlas = ExtResource("1_uei8r")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_47p44"]
+atlas = ExtResource("1_uei8r")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_72tsq"]
+atlas = ExtResource("1_uei8r")
+region = Rect2(96, 0, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_s2bbu"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ked0d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_47p44")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_72tsq")
+}],
+"loop": true,
+"name": &"fly",
+"speed": 10.0
+}]
 
-[node name="Bat" type="Node2D"]
+[node name="Bat" type="CharacterBody2D"]
+z_index = 3
+collision_layer = 2
+collision_mask = 5
+script = ExtResource("1_sn0de")
+_enemyResource = SubResource("Resource_i652w")
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+position = Vector2(0.51847, 0.0171585)
+shape = SubResource("RectangleShape2D_dh4qr")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_s2bbu")
+animation = &"fly"
+autoplay = "fly"
+frame = 1
+
+[node name="HitboxComponent" parent="." node_paths=PackedStringArray("_healthComponent") instance=ExtResource("2_6n4j3")]
+collision_layer = 2
+collision_mask = 5
+_healthComponent = NodePath("../HealthComponent")
+
+[node name="Collider" type="CollisionShape2D" parent="HitboxComponent"]
+position = Vector2(0.51847, 0.0171585)
+shape = SubResource("RectangleShape2D_dh4qr")
+
+[node name="HealthComponent" parent="." instance=ExtResource("4_166w4")]
+MAX_HEALTH = 30.0

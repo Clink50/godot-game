@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://csa17we6ichu8"]
+
+[ext_resource type="PackedScene" uid="uid://clld82eq1bdn8" path="res://scenes/components/HitboxComponent.tscn" id="1_ovt8k"]
+[ext_resource type="PackedScene" uid="uid://clsmmbrvvlpvl" path="res://scenes/components/HealthComponent.tscn" id="2_wiqrm"]
+
+[node name="DestrucibleProp" type="StaticBody2D"]
+collision_layer = 4
+collision_mask = 3
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="Hitbox" type="CollisionShape2D" parent="."]
+
+[node name="HitboxComponent" parent="." node_paths=PackedStringArray("_healthComponent") instance=ExtResource("1_ovt8k")]
+collision_layer = 4
+collision_mask = 3
+_healthComponent = NodePath("../HealthComponent")
+
+[node name="HealthComponent" parent="." instance=ExtResource("2_wiqrm")]

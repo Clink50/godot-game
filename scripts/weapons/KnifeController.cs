@@ -2,16 +2,25 @@ using Godot;
 
 public partial class KnifeController : Node2D, IBaseWeapon
 {
-    [Export] private float _throwSpeed = 400f; // Speed at which the knife moves
-	[Export] private int _currentPierce = 2;
+	[Export] private KnifeWeaponResource _knifeWeaponResource;
 
 	private Vector2 _throwDirection;
     private Vector2 _velocity;
+	private float _currentSpeed;
+	private float _currentDamage;
+	private float _currentPierce;
 
-    public override void _Process(double delta)
+	public override void _Ready()
+	{
+		_currentSpeed = _knifeWeaponResource.Speed;
+		_currentDamage = _knifeWeaponResource.Damage;
+		_currentPierce = _knifeWeaponResource.Pierce;
+	}
+
+    public override void _PhysicsProcess(double delta)
     {
         // Move the knife based on the velocity
-        Position += _velocity * (float)delta;
+        Position += _velocity * _currentSpeed * (float)delta;
     }
 
 	public void Activate(Player player)
@@ -24,7 +33,7 @@ public partial class KnifeController : Node2D, IBaseWeapon
 	// New method to handle knife throw direction and orientation internally
 	public void ThrowInDirection(Vector2 direction)
 	{
-		_velocity = direction.Normalized() * _throwSpeed;
+		_velocity = direction.Normalized();
 		UpdateOrientation(direction);
 	}
 
@@ -75,20 +84,18 @@ public partial class KnifeController : Node2D, IBaseWeapon
 	{
 		if (area is HitboxComponent hitboxComponent)
 		{
-			hitboxComponent.Damage(10);
+			hitboxComponent.Damage(_currentDamage);
 			ReducePierce();
 		}
 	}
 
 	public void ReducePierce()
 	{
+		_currentPierce--;
+
 		if (_currentPierce <= 0)
 		{
 			QueueFree();
-		}
-		else
-		{
-			_currentPierce--;
 		}
 	}
 

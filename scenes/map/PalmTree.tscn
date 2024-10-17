@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://bm186cdhdwxfv"]
+
+[ext_resource type="PackedScene" uid="uid://csa17we6ichu8" path="res://scenes/map/DestrucibleProp.tscn" id="1_iga36"]
+[ext_resource type="Texture2D" uid="uid://bc1wl5ksomgjq" path="res://art/map/terrain.png" id="2_u7y7m"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_7gq3k"]
+radius = 2.62323
+height = 9.20246
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1a7we"]
+size = Vector2(41.1098, 54.9409)
+
+[node name="PalmTree" instance=ExtResource("1_iga36")]
+position = Vector2(0, -27.5)
+
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("2_u7y7m")
+region_enabled = true
+region_rect = Rect2(195, 38, 43, 57)
+
+[node name="Hitbox" parent="." index="1"]
+position = Vector2(0.5, 24.87)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_7gq3k")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" index="0"]
+position = Vector2(0.0213394, 0.132162)
+shape = SubResource("RectangleShape2D_1a7we")
+
+[node name="HealthComponent" parent="." index="3"]
+MAX_HEALTH = 20.0

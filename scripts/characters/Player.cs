@@ -6,6 +6,7 @@ public partial class Player : CharacterBody2D
 	[Export] private float _speedMultiplier = 2;
 	private Sprite2D _playerSprite;
 	private AnimationPlayer _animationPlayer;
+	private Timer _attackTimer;
 
 	public Vector2 CurrentVelocity { get; set; }
 	public Vector2 LastVelocity { get; set; } = Vector2.Right;
@@ -14,7 +15,7 @@ public partial class Player : CharacterBody2D
 	{
 		_playerSprite = GetNode<Sprite2D>("Sprite2D");
 		_animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-		SetupWeaponAttack("Knife");
+		SetupWeaponAttack(WeaponType.Garlic);
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -69,30 +70,38 @@ public partial class Player : CharacterBody2D
 		MoveAndSlide();
 	}
 
-	private void SetupWeaponAttack(string weaponType)
-	{
-		Timer attackTimer = new()
+	private void SetupWeaponAttack(WeaponType weaponType)
+    {
+		_attackTimer = new()
 		{
 			OneShot = false,
 			Autostart = true,
+			WaitTime = weaponType == WeaponType.Knife ? 1f : 2f,
+			Name = "AttackTimer"
 		};
+		AddChild(_attackTimer);
+        _attackTimer.Timeout += () => OnAttackTimerTimeout(weaponType);
+    }
 
-		if (weaponType == "Knife")
-		{
-			attackTimer.WaitTime = 1f;
-		}
-		else if (weaponType == "Garlic")
-		{
-			attackTimer.WaitTime = 3f;
-		}
-
-		AddChild(attackTimer);
-		attackTimer.Timeout += () => OnAttackTimerTimeout(weaponType);
-	}
-
-	private void OnAttackTimerTimeout(string weaponType)
+	private void OnAttackTimerTimeout(WeaponType weaponType)
 	{
 		var weaponInstance = GD.Load<PackedScene>($"res://scenes/weapons/{weaponType}Weapon.tscn").Instantiate() as IBaseWeapon;
+
+		if (weaponType == WeaponType.Garlic)
+		{
+			(weaponInstance as GarlicController).GarlicDespawned += StartAttackTimer;
+		}
+
 		weaponInstance.Activate(this);
+	}
+
+	public void StartAttackTimer()
+	{
+		_attackTimer.Start();
+	}
+
+	public void StopAttackTimer()
+	{
+		_attackTimer.Stop();
 	}
 }

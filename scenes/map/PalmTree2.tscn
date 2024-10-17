@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://cquvtk8t7b1lq"]
+
+[ext_resource type="PackedScene" uid="uid://bm186cdhdwxfv" path="res://scenes/map/PalmTree.tscn" id="1_70f06"]
+
+[node name="PalmTree" instance=ExtResource("1_70f06")]
+position = Vector2(-7, -27)
+
+[node name="Sprite2D" parent="." index="0"]
+region_rect = Rect2(245, 38, 43, 58)
+metadata/_edit_group_ = true
+
+[node name="Hitbox" parent="." index="1"]
+position = Vector2(7, 24.375)
+
+[node name="CollisionShape2D" parent="HitboxComponent" index="0"]
+position = Vector2(0, -0.5)

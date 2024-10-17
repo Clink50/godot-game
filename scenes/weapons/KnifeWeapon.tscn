@@ -1,8 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://4ugjmypi4qvg"]
+[gd_scene load_steps=7 format=3 uid="uid://4ugjmypi4qvg"]
 
 [ext_resource type="Script" path="res://scripts/weapons/KnifeController.cs" id="1_3b0gb"]
 [ext_resource type="Texture2D" uid="uid://bn8o8uydwji4o" path="res://art/props/weapons.png" id="2_5smou"]
+[ext_resource type="Script" path="res://scripts/resources/weapons/KnifeWeaponResource.cs" id="2_a1x2r"]
 [ext_resource type="PackedScene" uid="uid://clld82eq1bdn8" path="res://scenes/components/HitboxComponent.tscn" id="3_dsncq"]
+
+[sub_resource type="Resource" id="Resource_iw5ju"]
+script = ExtResource("2_a1x2r")
+Damage = 10.0
+Speed = 400.0
+Pierce = 1
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4etg7"]
 radius = 1.09535
@@ -11,6 +18,7 @@ height = 12.2854
 [node name="KnifeWeapon" type="Node2D"]
 rotation = 0.785398
 script = ExtResource("1_3b0gb")
+_knifeWeaponResource = SubResource("Resource_iw5ju")
 metadata/_edit_group_ = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -20,8 +28,6 @@ region_enabled = true
 region_rect = Rect2(5, 100, 23, 24)
 
 [node name="HitboxComponent" parent="." instance=ExtResource("3_dsncq")]
-collision_layer = 2
-collision_mask = 28
 
 [node name="Collider" type="CollisionShape2D" parent="HitboxComponent"]
 position = Vector2(1.75, -1.5)
