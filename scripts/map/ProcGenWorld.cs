@@ -21,8 +21,8 @@ public partial class ProcGenWorld : Node2D
 	private TileMapLayer _environmentLayer;
 
 	// Map Grid
-	private int _width = 100;
-	private int _height = 100;
+	private int _width = 400;
+	private int _height = 400;
 
 	private int _tileSetSourceId = 1;
 	private int _treeSourceId = 0;
@@ -53,8 +53,22 @@ public partial class ProcGenWorld : Node2D
 
 	public override void _Ready()
 	{
+		GD.Randomize();
 		_noise = _noiseHeightTexture.GetNoise();
 		_treeNoise = _noiseTreeTexture.GetNoise();
+
+		// Check if the noise instance has a 'Seed' property
+		var seedProperty = _noise.GetPropertyList().Any(p => (string)p["name"] == "seed");
+
+		if (seedProperty)
+		{
+			// Set the seed dynamically
+			_noise.Set("seed", (int)GD.Randi());
+		}
+		else
+		{
+			GD.Print("This noise type does not have a Seed property.");
+		}
 
 		_waterLayer = GetNode<TileMapLayer>("Water");
 		_groundLayer = GetNode<TileMapLayer>("Ground");
@@ -70,6 +84,7 @@ public partial class ProcGenWorld : Node2D
 	private void GenerateWorld()
 	{
 		var noises = new List<float>();
+		var normalizedNoises = new List<float>();
 		var treeNoises = new List<float>();
 
 		for (int x = -_width / 2; x < _width / 2; x++)
@@ -77,29 +92,40 @@ public partial class ProcGenWorld : Node2D
 			for (int y = -_height / 2; y < _height / 2; y++)
 			{
 				var noiseValue = _noise.GetNoise2D(x, y);
-				var treeNoiseValue = _treeNoise.GetNoise2D(x, y);
 				noises.Add(noiseValue);
-				treeNoises.Add(treeNoiseValue);
+			}
+		}
+
+		var minNoiseValue = noises.Min();
+		var maxNoiseValue = noises.Max();
+
+		for (int x = -_width / 2; x < _width / 2; x++)
+		{
+			for (int y = -_height / 2; y < _height / 2; y++)
+			{
+				var rawNoiseValue = _noise.GetNoise2D(x, y);
+				var noiseValue = NormalizeNoise(rawNoiseValue, minNoiseValue, maxNoiseValue);
+				var treeNoiseValue = _treeNoise.GetNoise2D(x, y);
 
 				// All Ground Type
-				if (noiseValue >= 0f)
+				if (noiseValue >= 0.45f)
 				{
 					// Sand starts here
-					if (noiseValue > 0.05f && noiseValue < 0.17f && treeNoiseValue > 0.8f)
+					if (noiseValue > 0.5f && noiseValue < 0.6f && treeNoiseValue > 0.8f)
 					{
 						_environmentLayer.SetCell(new Vector2I(x, y), _treeSourceId, _sceneCollectionAtlasCoords, _palmTreeSceneIds.PickRandom());
 					}
 
 					// Grass starts here
-					if (noiseValue > 0.2f)
+					if (noiseValue > 0.65f)
 					{
 						// Sand to Grass tiles
 						_grassTiles.Add(new Vector2I(x, y));
 
 						// Not edge of sand
-						if (noiseValue > 0.25f)
+						if (noiseValue > 0.7f)
 						{
-							if (noiseValue > 0.35f && treeNoiseValue > 0.8f)
+							if (noiseValue > 0.8f && treeNoiseValue > 0.8f)
 							{
 								_environmentLayer.SetCell(new Vector2I(x, y), _treeSourceId, _sceneCollectionAtlasCoords, 1);
 							}
@@ -109,7 +135,7 @@ public partial class ProcGenWorld : Node2D
 						}
 
 						// Cliffs start here
-						if (noiseValue > 0.4)
+						if (noiseValue > 0.9)
 						{
 							_cliffTiles.Add(new Vector2I(x, y));
 						}
@@ -126,8 +152,8 @@ public partial class ProcGenWorld : Node2D
 		_groundLayer.SetCellsTerrainConnect(_grassTiles, _grassTerrainSet, 0);
 		_cliffLayer.SetCellsTerrainConnect(_cliffTiles, _cliffTerrainSet, 0);
 
-		GD.Print("Noise Max: " + noises.Max());
-		GD.Print("Noise Min: " + noises.Min());
+		GD.Print("Noise Min: " + minNoiseValue);
+		GD.Print("Noise Max: " + maxNoiseValue);
 		GD.Print("Tree Noise Max: " + treeNoises.Max());
 		GD.Print("Tree Noise Min: " + treeNoises.Min());
 	}
@@ -151,6 +177,9 @@ public partial class ProcGenWorld : Node2D
 			camera2d.Zoom = new Vector2(zoomValue, zoomValue);
 		}
 	}
+
+	private static float NormalizeNoise(float value, float minValue, float maxValue)
+		=> (value - minValue)/(maxValue - minValue);
 }
 
 // Normalize min and max of noise values to get 0 and 1 so you don't have to change
