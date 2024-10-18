@@ -21,8 +21,8 @@ public partial class ProcGenWorld : Node2D
 	private TileMapLayer _environmentLayer;
 
 	// Map Grid
-	private int _width = 100;
-	private int _height = 100;
+	private int _width = 400;
+	private int _height = 400;
 
 	private int _tileSetSourceId = 1;
 	private int _treeSourceId = 0;
@@ -51,24 +51,27 @@ public partial class ProcGenWorld : Node2D
 	// Environment Tiles
 	private Array<int> _palmTreeSceneIds = new() { 2, 3 };
 
+	// List of placed trees
+	private HashSet<Vector2> _placedTreePositions = new();
+
 	public override void _Ready()
 	{
-		GD.Randomize();
+		// GD.Randomize();
 		_noise = _noiseHeightTexture.GetNoise();
 		_treeNoise = _noiseTreeTexture.GetNoise();
 
 		// Check if the noise instance has a 'Seed' property
-		var seedProperty = _noise.GetPropertyList().Any(p => (string)p["name"] == "seed");
+		// var seedProperty = _noise.GetPropertyList().Any(p => (string)p["name"] == "seed");
 
-		if (seedProperty)
-		{
-			// Set the seed dynamically
-			_noise.Set("seed", (int)GD.Randi());
-		}
-		else
-		{
-			GD.Print("This noise type does not have a Seed property.");
-		}
+		// if (seedProperty)
+		// {
+		// 	// Set the seed dynamically
+		// 	_noise.Set("seed", (int)GD.Randi());
+		// }
+		// else
+		// {
+		// 	GD.Print("This noise type does not have a Seed property.");
+		// }
 
 		_waterLayer = GetNode<TileMapLayer>("Water");
 		_groundLayer = GetNode<TileMapLayer>("Ground");
@@ -84,7 +87,6 @@ public partial class ProcGenWorld : Node2D
 	private void GenerateWorld()
 	{
 		var noises = new List<float>();
-		var normalizedNoises = new List<float>();
 		var treeNoises = new List<float>();
 
 		for (int x = -_width / 2; x < _width / 2; x++)
@@ -113,7 +115,8 @@ public partial class ProcGenWorld : Node2D
 					// Sand starts here
 					if (noiseValue > 0.5f && noiseValue < 0.6f && treeNoiseValue > 0.8f)
 					{
-						_environmentLayer.SetCell(new Vector2I(x, y), _treeSourceId, _sceneCollectionAtlasCoords, _palmTreeSceneIds.PickRandom());
+						// _environmentLayer.SetCell(new Vector2I(x, y), _treeSourceId, _sceneCollectionAtlasCoords, _palmTreeSceneIds.PickRandom());
+						PlaceTree(new Vector2I(x, y), _palmTreeSceneIds.PickRandom());
 					}
 
 					// Grass starts here
@@ -127,7 +130,8 @@ public partial class ProcGenWorld : Node2D
 						{
 							if (noiseValue > 0.8f && treeNoiseValue > 0.8f)
 							{
-								_environmentLayer.SetCell(new Vector2I(x, y), _treeSourceId, _sceneCollectionAtlasCoords, 1);
+								// _environmentLayer.SetCell(new Vector2I(x, y), _treeSourceId, _sceneCollectionAtlasCoords, 1);
+								PlaceTree(new Vector2I(x, y), 1);
 							}
 
 							// Different types of grass tiles go here
@@ -156,6 +160,29 @@ public partial class ProcGenWorld : Node2D
 		GD.Print("Noise Max: " + maxNoiseValue);
 		GD.Print("Tree Noise Max: " + treeNoises.Max());
 		GD.Print("Tree Noise Min: " + treeNoises.Min());
+	}
+
+	// Check within a 3 tile radius to see if another tree is nearby, if so then skip the placement so
+	// there aren't trees bunched together or on top of each other
+	public void PlaceTree(Vector2I tilePlacement, int treeId)
+	{
+		// Check if there are any trees within the 3-tile radius
+		for (int x = -2; x <= 2; x++)
+		{
+			for (int y = -2; y <= 2; y++)
+			{
+				var checkPosition = tilePlacement + new Vector2I(x, y);
+
+				// If a tree is within this tile, skip placing a new tree here
+				if (_placedTreePositions.Contains(checkPosition))
+				{
+					return; // Skip this placement
+				}
+			}
+		}
+
+		_environmentLayer.SetCell(tilePlacement, _treeSourceId, _sceneCollectionAtlasCoords, treeId);
+		_placedTreePositions.Add(tilePlacement);
 	}
 
 	public override void _Input(InputEvent @event)
