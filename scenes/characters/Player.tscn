@@ -119,6 +119,7 @@ _data = {
 }
 
 [node name="Player" type="CharacterBody2D"]
+z_index = 5
 y_sort_enabled = true
 collision_mask = 6
 motion_mode = 1

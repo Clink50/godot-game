@@ -21,8 +21,8 @@ public partial class ProcGenWorld : Node2D
 	private TileMapLayer _environmentLayer;
 
 	// Map Grid
-	private int _width = 400;
-	private int _height = 400;
+	private int _width = 100;
+	private int _height = 100;
 
 	private int _tileSetSourceId = 1;
 	private int _treeSourceId = 0;
