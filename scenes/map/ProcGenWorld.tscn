@@ -1,8 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://bb6ygkykh10ef"]
+[gd_scene load_steps=11 format=3 uid="uid://bb6ygkykh10ef"]
 
 [ext_resource type="Script" path="res://scripts/map/ProcGenWorld.cs" id="1_ssb2f"]
 [ext_resource type="TileSet" uid="uid://cycyppughkkij" path="res://art/tilesets/terrain.tres" id="2_u8ct8"]
 [ext_resource type="PackedScene" uid="uid://bwccokr3x3o7k" path="res://scenes/characters/Player.tscn" id="3_0k8sl"]
+[ext_resource type="PackedScene" uid="uid://10rfc40h71xu" path="res://scenes/characters/enemies/Bat.tscn" id="4_xjj7f"]
+[ext_resource type="PackedScene" uid="uid://bqkde6o6xgl7e" path="res://scenes/characters/enemies/Orc.tscn" id="5_dmqq1"]
 
 [sub_resource type="Gradient" id="Gradient_pjdvk"]
 
@@ -53,3 +55,10 @@ tile_set = ExtResource("2_u8ct8")
 
 [node name="Player" parent="." instance=ExtResource("3_0k8sl")]
 z_index = 2
+
+[node name="Bat" parent="." instance=ExtResource("4_xjj7f")]
+position = Vector2(190.647, 22.2201)
+
+[node name="Enemy" parent="." instance=ExtResource("5_dmqq1")]
+position = Vector2(141.217, -98.8791)
+scale = Vector2(1.25, 1.25)

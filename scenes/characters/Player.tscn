@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bwccokr3x3o7k"]
+[gd_scene load_steps=8 format=3 uid="uid://bwccokr3x3o7k"]
 
 [ext_resource type="Texture2D" uid="uid://d1yqhgs48c74r" path="res://art/characters/players/main.png" id="1_gwkok"]
 [ext_resource type="Script" path="res://scripts/characters/Player.cs" id="1_ywism"]
@@ -118,6 +118,9 @@ _data = {
 "sideWalk": SubResource("Animation_k0lmx")
 }
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g3nwv"]
+size = Vector2(11.0173, 27.3087)
+
 [node name="Player" type="CharacterBody2D"]
 z_index = 5
 y_sort_enabled = true
@@ -134,7 +137,7 @@ hframes = 8
 vframes = 8
 frame = 48
 
-[node name="Hitbox" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -0.75)
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_2wrhb")
@@ -146,3 +149,9 @@ libraries = {
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(0.5, 0.5)
+
+[node name="Hurtbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(-0.00802231, -13.6214)
+shape = SubResource("RectangleShape2D_g3nwv")

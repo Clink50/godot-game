@@ -3,7 +3,6 @@ using System.Linq;
 using Godot;
 using Godot.Collections;
 
-[Tool]
 public partial class ProcGenWorld : Node2D
 {
 	[Export] private NoiseTexture2D _noiseHeightTexture;
@@ -21,8 +20,8 @@ public partial class ProcGenWorld : Node2D
 	private TileMapLayer _environmentLayer;
 
 	// Map Grid
-	private int _width = 400;
-	private int _height = 400;
+	private int _width = 100;
+	private int _height = 100;
 
 	private int _tileSetSourceId = 1;
 	private int _treeSourceId = 0;
@@ -56,22 +55,22 @@ public partial class ProcGenWorld : Node2D
 
 	public override void _Ready()
 	{
-		// GD.Randomize();
+		GD.Randomize();
 		_noise = _noiseHeightTexture.GetNoise();
 		_treeNoise = _noiseTreeTexture.GetNoise();
 
 		// Check if the noise instance has a 'Seed' property
-		// var seedProperty = _noise.GetPropertyList().Any(p => (string)p["name"] == "seed");
+		var seedProperty = _noise.GetPropertyList().Any(p => (string)p["name"] == "seed");
 
-		// if (seedProperty)
-		// {
-		// 	// Set the seed dynamically
-		// 	_noise.Set("seed", (int)GD.Randi());
-		// }
-		// else
-		// {
-		// 	GD.Print("This noise type does not have a Seed property.");
-		// }
+		if (seedProperty)
+		{
+			// Set the seed dynamically
+			_noise.Set("seed", (int)GD.Randi());
+		}
+		else
+		{
+			GD.Print("This noise type does not have a Seed property.");
+		}
 
 		_waterLayer = GetNode<TileMapLayer>("Water");
 		_groundLayer = GetNode<TileMapLayer>("Ground");
@@ -155,11 +154,6 @@ public partial class ProcGenWorld : Node2D
 		_groundLayer.SetCellsTerrainConnect(_sandTiles, _sandTerrainSet, 0);
 		_groundLayer.SetCellsTerrainConnect(_grassTiles, _grassTerrainSet, 0);
 		_cliffLayer.SetCellsTerrainConnect(_cliffTiles, _cliffTerrainSet, 0);
-
-		GD.Print("Noise Min: " + minNoiseValue);
-		GD.Print("Noise Max: " + maxNoiseValue);
-		GD.Print("Tree Noise Max: " + treeNoises.Max());
-		GD.Print("Tree Noise Min: " + treeNoises.Min());
 	}
 
 	// Check within a 3 tile radius to see if another tree is nearby, if so then skip the placement so

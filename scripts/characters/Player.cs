@@ -15,7 +15,7 @@ public partial class Player : CharacterBody2D
 	{
 		_playerSprite = GetNode<Sprite2D>("Sprite2D");
 		_animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-		SetupWeaponAttack(WeaponType.Garlic);
+		SetupWeaponAttack(WeaponType.Knife);
 	}
 
 	public override void _PhysicsProcess(double delta)

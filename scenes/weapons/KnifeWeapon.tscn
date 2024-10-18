@@ -28,6 +28,7 @@ region_enabled = true
 region_rect = Rect2(5, 100, 23, 24)
 
 [node name="HitboxComponent" parent="." instance=ExtResource("3_dsncq")]
+collision_mask = 6
 
 [node name="Collider" type="CollisionShape2D" parent="HitboxComponent"]
 position = Vector2(1.75, -1.5)

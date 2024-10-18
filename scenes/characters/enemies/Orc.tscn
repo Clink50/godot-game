@@ -1,12 +1,18 @@
-[gd_scene load_steps=33 format=3 uid="uid://bqkde6o6xgl7e"]
+[gd_scene load_steps=34 format=3 uid="uid://bqkde6o6xgl7e"]
 
 [ext_resource type="Texture2D" uid="uid://voeiuxrwxmq2" path="res://art/characters/enemies/orc/Orc/Orc-Walk.png" id="1_ct4xr"]
 [ext_resource type="Texture2D" uid="uid://3grpl2urihm7" path="res://art/characters/enemies/orc/Orc/Orc-Idle.png" id="1_cuem8"]
 [ext_resource type="Script" path="res://scripts/characters/enemies/Orc.cs" id="1_uvw01"]
 [ext_resource type="Texture2D" uid="uid://b7al6yrg6h8rf" path="res://art/characters/enemies/orc/Orc/Orc-Hurt.png" id="2_6tlve"]
 [ext_resource type="Texture2D" uid="uid://bd7ns1863iie3" path="res://art/characters/enemies/orc/Orc/Orc-Death.png" id="2_b6kwo"]
-[ext_resource type="PackedScene" uid="uid://clsmmbrvvlpvl" path="res://scenes/components/HealthComponent.tscn" id="6_j12o1"]
+[ext_resource type="Script" path="res://scripts/resources/enemies/EnemyResource.cs" id="2_wdo6e"]
 [ext_resource type="PackedScene" uid="uid://clld82eq1bdn8" path="res://scenes/components/HitboxComponent.tscn" id="7_du2h0"]
+
+[sub_resource type="Resource" id="Resource_0u7hl"]
+script = ExtResource("2_wdo6e")
+Speed = 10.0
+MaxHealth = 50.0
+Damage = 20.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_kqwr1"]
 radius = 2.1282
@@ -193,9 +199,11 @@ animations = [{
 size = Vector2(13.0093, 14.9723)
 
 [node name="Enemy" type="CharacterBody2D"]
+collision_layer = 2
 script = ExtResource("1_uvw01")
+_enemyResource = SubResource("Resource_0u7hl")
 
-[node name="Hitbox" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0.524483, -1)
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_kqwr1")
@@ -208,10 +216,9 @@ animation = &"idle"
 autoplay = "idle"
 frame_progress = 0.804831
 
-[node name="HealthComponent" parent="." instance=ExtResource("6_j12o1")]
-
-[node name="HitboxComponent" parent="." node_paths=PackedStringArray("_healthComponent") instance=ExtResource("7_du2h0")]
-_healthComponent = NodePath("../HealthComponent")
+[node name="HitboxComponent" parent="." instance=ExtResource("7_du2h0")]
+collision_layer = 2
+collision_mask = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
 position = Vector2(0.504672, -7.50606)

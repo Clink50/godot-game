@@ -1,18 +1,18 @@
-[gd_scene load_steps=5 format=3 uid="uid://bpvgwbqpj6tjf"]
+[gd_scene load_steps=6 format=3 uid="uid://bpvgwbqpj6tjf"]
 
 [ext_resource type="PackedScene" uid="uid://csa17we6ichu8" path="res://scenes/map/DestrucibleProp.tscn" id="1_avftj"]
 [ext_resource type="Texture2D" uid="uid://bc1wl5ksomgjq" path="res://art/map/terrain.png" id="2_5jrai"]
-
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_lbybs"]
-radius = 3.49299
-height = 26.1954
+[ext_resource type="PackedScene" uid="uid://4ugjmypi4qvg" path="res://scenes/weapons/KnifeWeapon.tscn" id="3_2l2ji"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ikivu"]
-size = Vector2(26.3695, 15.4081)
+size = Vector2(26.3695, 15.0875)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gt6i7"]
+radius = 3.23086
+height = 23.511
 
 [node name="OakTree" instance=ExtResource("1_avftj")]
 z_index = 2
-metadata/_edit_group_ = true
 
 [node name="Sprite2D" parent="." index="0"]
 texture = ExtResource("2_5jrai")
@@ -20,17 +20,21 @@ offset = Vector2(0, -14.5)
 region_enabled = true
 region_rect = Rect2(241, 100, 47, 63)
 
-[node name="Hitbox" parent="." index="1"]
-position = Vector2(-1.4, 10)
-rotation = 1.5708
-shape = SubResource("CapsuleShape2D_lbybs")
-
-[node name="HitboxComponent" parent="." index="2"]
+[node name="HitboxComponent" parent="." index="1" node_paths=PackedStringArray("_healthComponent")]
 position = Vector2(0, -13)
+_healthComponent = NodePath("../HealthComponent")
 
-[node name="Hurtbox" type="CollisionShape2D" parent="HitboxComponent" index="0"]
-position = Vector2(-1.4, 18.75)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" index="0"]
+position = Vector2(-1.5, 18.5)
 shape = SubResource("RectangleShape2D_ikivu")
+
+[node name="CollisionShape2D" parent="." index="2"]
+position = Vector2(-1.5, 9.75)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_gt6i7")
 
 [node name="HealthComponent" parent="." index="3"]
 MAX_HEALTH = 30.0
+
+[node name="KnifeWeapon" parent="." index="4" instance=ExtResource("3_2l2ji")]
+position = Vector2(-21.1588, 3.00678)
