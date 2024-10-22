@@ -199,7 +199,9 @@ animations = [{
 size = Vector2(13.0093, 14.9723)
 
 [node name="Enemy" type="CharacterBody2D"]
+z_index = 5
 collision_layer = 2
+collision_mask = 3
 script = ExtResource("1_uvw01")
 _enemyResource = SubResource("Resource_0u7hl")
 
@@ -212,9 +214,9 @@ shape = SubResource("CapsuleShape2D_kqwr1")
 texture_filter = 1
 position = Vector2(0, -7)
 sprite_frames = SubResource("SpriteFrames_v341o")
-animation = &"idle"
+animation = &"walk"
 autoplay = "idle"
-frame_progress = 0.804831
+frame_progress = 0.51414
 
 [node name="HitboxComponent" parent="." instance=ExtResource("7_du2h0")]
 collision_layer = 2

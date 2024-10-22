@@ -1,8 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://bpvgwbqpj6tjf"]
+[gd_scene load_steps=5 format=3 uid="uid://bpvgwbqpj6tjf"]
 
 [ext_resource type="PackedScene" uid="uid://csa17we6ichu8" path="res://scenes/map/DestrucibleProp.tscn" id="1_avftj"]
 [ext_resource type="Texture2D" uid="uid://bc1wl5ksomgjq" path="res://art/map/terrain.png" id="2_5jrai"]
-[ext_resource type="PackedScene" uid="uid://4ugjmypi4qvg" path="res://scenes/weapons/KnifeWeapon.tscn" id="3_2l2ji"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ikivu"]
 size = Vector2(26.3695, 15.0875)
@@ -35,6 +34,3 @@ shape = SubResource("CapsuleShape2D_gt6i7")
 
 [node name="HealthComponent" parent="." index="3"]
 MAX_HEALTH = 30.0
-
-[node name="KnifeWeapon" parent="." index="4" instance=ExtResource("3_2l2ji")]
-position = Vector2(-21.1588, 3.00678)

@@ -27,6 +27,7 @@ region_enabled = true
 region_rect = Rect2(164, 132, 24, 24)
 
 [node name="HitboxComponent" parent="." instance=ExtResource("3_kwemr")]
+collision_mask = 2
 
 [node name="Collider" type="CollisionShape2D" parent="HitboxComponent"]
 shape = SubResource("CircleShape2D_g2n7d")
@@ -36,4 +37,5 @@ wait_time = 2.0
 one_shot = true
 autostart = true
 
+[connection signal="area_entered" from="HitboxComponent" to="." method="OnHitboxAreaEntered"]
 [connection signal="timeout" from="DespawnTimer" to="." method="OnDespawnTimerTimeout"]

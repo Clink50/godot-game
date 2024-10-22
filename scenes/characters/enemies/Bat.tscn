@@ -164,7 +164,7 @@ _data = {
 }
 
 [node name="Bat" type="CharacterBody2D"]
-z_index = 3
+z_index = 5
 collision_layer = 2
 collision_mask = 5
 script = ExtResource("1_sn0de")
