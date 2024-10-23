@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://c4jqr1lba4vlv"]
+
+[ext_resource type="Texture2D" uid="uid://c20aymnatco17" path="res://art/props/gems.png" id="1_0uf44"]
+[ext_resource type="Script" path="res://scripts/pickups/ExperienceGem.cs" id="1_74ghd"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7p3m0"]
+radius = 5.15287
+
+[node name="Gem" type="Area2D"]
+script = ExtResource("1_74ghd")
+_experienceGranted = 100
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_0uf44")
+region_enabled = true
+region_rect = Rect2(5, 37, 21, 21)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_7p3m0")
+
+[connection signal="body_entered" from="." to="." method="OnPickUpItem"]

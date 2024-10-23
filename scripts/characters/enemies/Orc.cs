@@ -4,7 +4,7 @@ public partial class Orc : CharacterBody2D
 {
 	[Export] private EnemyResource _enemyResource;
 	private HitboxComponent _hitbox;
-	private Player _player;
+	private CharacterBody2D _player;
 	private AnimatedSprite2D _animatedSprite;
 	private float _currentSpeed;
 	private float _currentHealth;
@@ -12,7 +12,7 @@ public partial class Orc : CharacterBody2D
 
 	public override void _Ready()
 	{
-		_player = GetParent().GetNode<Player>("Player");
+		_player = GetTree().CurrentScene.GetNode<CharacterBody2D>("Player");
 
 		_currentSpeed = _enemyResource.Speed;
 		_currentHealth = _enemyResource.MaxHealth;

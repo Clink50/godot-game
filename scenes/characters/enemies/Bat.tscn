@@ -1,14 +1,17 @@
-[gd_scene load_steps=10 format=3 uid="uid://10rfc40h71xu"]
+[gd_scene load_steps=14 format=3 uid="uid://10rfc40h71xu"]
 
 [ext_resource type="Script" path="res://scripts/characters/enemies/Bat.cs" id="1_sn0de"]
 [ext_resource type="Texture2D" uid="uid://dn238tm2kfd3v" path="res://art/characters/enemies/bat.png" id="1_uei8r"]
 [ext_resource type="PackedScene" uid="uid://clld82eq1bdn8" path="res://scenes/components/HitboxComponent.tscn" id="2_6n4j3"]
 [ext_resource type="Script" path="res://scripts/resources/enemies/EnemyResource.cs" id="2_t75ng"]
+[ext_resource type="Script" path="res://scripts/DropRateManager.cs" id="5_fm0gl"]
+[ext_resource type="PackedScene" uid="uid://c4jqr1lba4vlv" path="res://scenes/props/Gem.tscn" id="6_pkpry"]
+[ext_resource type="Script" path="res://scripts/resources/DropResource.cs" id="7_oeyox"]
 
 [sub_resource type="Resource" id="Resource_i652w"]
 script = ExtResource("2_t75ng")
 Speed = 50.0
-MaxHealth = 30.0
+MaxHealth = 10.0
 Damage = 10.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0yep0"]
@@ -163,10 +166,18 @@ _data = {
 "fly": SubResource("Animation_30yxo")
 }
 
+[sub_resource type="Resource" id="Resource_pc8ds"]
+script = ExtResource("7_oeyox")
+name = "Blue Gem"
+item = ExtResource("6_pkpry")
+dropRate = 100.0
+
 [node name="Bat" type="CharacterBody2D"]
 z_index = 5
 collision_layer = 2
 collision_mask = 5
+motion_mode = 1
+platform_on_leave = 2
 script = ExtResource("1_sn0de")
 _enemyResource = SubResource("Resource_i652w")
 
@@ -193,3 +204,7 @@ collision_mask = 5
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
 position = Vector2(0.5, 0)
 shape = SubResource("RectangleShape2D_0yep0")
+
+[node name="DropItem" type="Node2D" parent="."]
+script = ExtResource("5_fm0gl")
+_drops = Array[Object]([SubResource("Resource_pc8ds")])

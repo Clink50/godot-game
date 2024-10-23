@@ -2,7 +2,7 @@ using Godot;
 
 public partial class Player : CharacterBody2D
 {
-	[Export] private float _speed = 150f;
+	[Export] private CharacterResource _characterResource;
 	[Export] private float _speedMultiplier = 2;
 	private Sprite2D _playerSprite;
 	private AnimationPlayer _animationPlayer;
@@ -11,11 +11,24 @@ public partial class Player : CharacterBody2D
 	public Vector2 CurrentVelocity { get; set; }
 	public Vector2 LastVelocity { get; set; } = Vector2.Right;
 
+	private float _currentHealth;
+	private float _currentRecovery;
+	private float _currentSpeed;
+	private float _currentMight;
+	private float _currentProjectileSpeed;
+
 	public override void _Ready()
 	{
 		_playerSprite = GetNode<Sprite2D>("Sprite2D");
 		_animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-		SetupWeaponAttack(WeaponType.Garlic);
+
+		_currentHealth = _characterResource.MaxHealth;
+		_currentRecovery = _characterResource.Recovery;
+		_currentSpeed = _characterResource.Speed;
+		_currentMight = _characterResource.Might;
+		_currentProjectileSpeed = _characterResource.ProjectileSpeed;
+
+		SetupWeaponAttack(_characterResource.StartingWeapon);
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -57,7 +70,7 @@ public partial class Player : CharacterBody2D
 		}
 
 		// Apply speed to the movement
-		CurrentVelocity *= _speed;
+		CurrentVelocity *= _currentSpeed;
 
 		// Check if the player is running and apply speed multiplier
 		if (Input.IsActionPressed("run"))
@@ -104,4 +117,12 @@ public partial class Player : CharacterBody2D
 	{
 		_attackTimer.Stop();
 	}
+
+	private void OnBodyEntered(Node2D body)
+    {
+        if (body is ICollectible collectible)
+        {
+            collectible.Collect();
+        }
+    }
 }

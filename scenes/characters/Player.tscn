@@ -1,7 +1,19 @@
-[gd_scene load_steps=8 format=3 uid="uid://bwccokr3x3o7k"]
+[gd_scene load_steps=15 format=3 uid="uid://bwccokr3x3o7k"]
 
 [ext_resource type="Texture2D" uid="uid://d1yqhgs48c74r" path="res://art/characters/players/main.png" id="1_gwkok"]
-[ext_resource type="Script" path="res://scripts/characters/Player.cs" id="1_ywism"]
+[ext_resource type="Script" path="res://scripts/characters/player/Player.cs" id="1_n08ts"]
+[ext_resource type="Script" path="res://scripts/resources/characters/CharacterResource.cs" id="2_wj6fn"]
+[ext_resource type="Script" path="res://scripts/characters/player/PlayerStats.cs" id="4_82vnk"]
+[ext_resource type="Script" path="res://scripts/resources/characters/player/LevelRangeResource.cs" id="5_wahhx"]
+
+[sub_resource type="Resource" id="Resource_cry30"]
+script = ExtResource("2_wj6fn")
+StartingWeapon = 1
+MaxHealth = 0.0
+Recovery = 0.0
+Speed = 150.0
+Might = 0.0
+ProjectileSpeed = 400.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2wrhb"]
 radius = 1.21967
@@ -121,6 +133,24 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g3nwv"]
 size = Vector2(11.0173, 27.3087)
 
+[sub_resource type="Resource" id="Resource_cqm7u"]
+script = ExtResource("5_wahhx")
+startLevel = 0
+endLevel = 1
+experienceCapIncrease = 0
+
+[sub_resource type="Resource" id="Resource_hr3s6"]
+script = ExtResource("5_wahhx")
+startLevel = 1
+endLevel = 3
+experienceCapIncrease = 100
+
+[sub_resource type="Resource" id="Resource_hm1ny"]
+script = ExtResource("5_wahhx")
+startLevel = 4
+endLevel = 5
+experienceCapIncrease = 200
+
 [node name="Player" type="CharacterBody2D"]
 z_index = 5
 y_sort_enabled = true
@@ -128,7 +158,8 @@ collision_mask = 6
 motion_mode = 1
 wall_min_slide_angle = 0.174533
 platform_on_leave = 2
-script = ExtResource("1_ywism")
+script = ExtResource("1_n08ts")
+_characterResource = SubResource("Resource_cry30")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(0, -11)
@@ -155,3 +186,7 @@ zoom = Vector2(0.5, 0.5)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
 position = Vector2(-0.00802231, -13.6214)
 shape = SubResource("RectangleShape2D_g3nwv")
+
+[node name="PlayerStats" type="Node2D" parent="."]
+script = ExtResource("4_82vnk")
+_levelRanges = Array[Resource]([SubResource("Resource_cqm7u"), SubResource("Resource_hr3s6"), SubResource("Resource_hm1ny")])
