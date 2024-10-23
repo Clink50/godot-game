@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/map/ProcGenWorld.cs" id="1_ssb2f"]
 [ext_resource type="TileSet" uid="uid://cycyppughkkij" path="res://art/tilesets/terrain.tres" id="2_u8ct8"]
 [ext_resource type="PackedScene" uid="uid://bwccokr3x3o7k" path="res://scenes/characters/Player.tscn" id="3_0k8sl"]
-[ext_resource type="PackedScene" uid="uid://10rfc40h71xu" path="res://scenes/characters/enemies/Bat.tscn" id="4_xjj7f"]
+[ext_resource type="PackedScene" uid="uid://10rfc40h71xu" path="res://scenes/characters/enemies/Bat.tscn" id="4_htcb0"]
 
 [sub_resource type="Gradient" id="Gradient_pjdvk"]
 
@@ -55,17 +55,11 @@ tile_set = ExtResource("2_u8ct8")
 [node name="Player" parent="." instance=ExtResource("3_0k8sl")]
 z_index = 2
 
-[node name="Bat" parent="." instance=ExtResource("4_xjj7f")]
-position = Vector2(242.783, -13.0975)
+[node name="Bat" parent="." instance=ExtResource("4_htcb0")]
+position = Vector2(147.529, -61.6808)
 
-[node name="Bat2" parent="." instance=ExtResource("4_xjj7f")]
-position = Vector2(214.192, 30.6291)
+[node name="Bat2" parent="." instance=ExtResource("4_htcb0")]
+position = Vector2(203.088, -0.565876)
 
-[node name="Bat3" parent="." instance=ExtResource("4_xjj7f")]
-position = Vector2(242.783, -50.097)
-
-[node name="Bat4" parent="." instance=ExtResource("4_xjj7f")]
-position = Vector2(202.419, 62.5831)
-
-[node name="Bat5" parent="." instance=ExtResource("4_xjj7f")]
-position = Vector2(168.784, -98.869)
+[node name="Bat3" parent="." instance=ExtResource("4_htcb0")]
+position = Vector2(149.117, 38.3255)

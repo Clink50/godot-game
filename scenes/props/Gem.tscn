@@ -7,6 +7,7 @@
 radius = 5.15287
 
 [node name="Gem" type="Area2D"]
+collision_layer = 8
 script = ExtResource("1_74ghd")
 _experienceGranted = 100
 
@@ -18,5 +19,3 @@ region_rect = Rect2(5, 37, 21, 21)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_7p3m0")
-
-[connection signal="body_entered" from="." to="." method="OnPickUpItem"]

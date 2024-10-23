@@ -2,5 +2,5 @@ using Godot;
 
 public interface ICollectible
 {
-	void Collect();
+	void Collect(Node2D body);
 }

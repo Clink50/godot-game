@@ -30,7 +30,7 @@ public partial class DropRateManager : Node2D
 			var randomDrop = possibleDrops.PickRandom();
 			var dropInstance = randomDrop.item.Instantiate() as Node2D;
 			dropInstance.Position = _parent.Position;
-			_parent.AddSibling(dropInstance);
+			_parent.CallDeferred("add_sibling", dropInstance);
 		}
 	}
 }

@@ -7,9 +7,9 @@ public partial class Player : CharacterBody2D
 	private Sprite2D _playerSprite;
 	private AnimationPlayer _animationPlayer;
 	private Timer _attackTimer;
+	private Area2D _itemDetectionArea;
 
-	public Vector2 CurrentVelocity { get; set; }
-	public Vector2 LastVelocity { get; set; } = Vector2.Right;
+	public Vector2 LastVelocity { get; private set; } = Vector2.Right;
 
 	private float _currentHealth;
 	private float _currentRecovery;
@@ -21,6 +21,9 @@ public partial class Player : CharacterBody2D
 	{
 		_playerSprite = GetNode<Sprite2D>("Sprite2D");
 		_animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+
+		_itemDetectionArea = GetNode<Area2D>("ItemCollector");
+    	_itemDetectionArea.AreaEntered += OnAreaEntered;
 
 		_currentHealth = _characterResource.MaxHealth;
 		_currentRecovery = _characterResource.Recovery;
@@ -38,22 +41,30 @@ public partial class Player : CharacterBody2D
 		float verticalDirection = Input.GetAxis("up", "down");
 
 		// Calculate and normalize the velocity
-		CurrentVelocity = new Vector2(horizontalDirection, verticalDirection).Normalized();
+		var currentVelocity = new Vector2(horizontalDirection, verticalDirection);
+
+		if (currentVelocity.Length() > 1)
+		{
+			currentVelocity = currentVelocity.Normalized();
+		}
+
+		// Apply speed to the movement
+		currentVelocity *= _currentSpeed;
 
 		// Store the last non-zero velocity component for direction retention
 		if (horizontalDirection != 0)
 		{
-			LastVelocity = new(CurrentVelocity.X, 0);
+			LastVelocity = new(currentVelocity.X, 0);
 		}
 
 		if (verticalDirection != 0)
 		{
-			LastVelocity = new(0, CurrentVelocity.Y);
+			LastVelocity = new(0, currentVelocity.Y);
 		}
 
 		if (horizontalDirection != 0 && verticalDirection != 0)
 		{
-			LastVelocity = new(CurrentVelocity.X, CurrentVelocity.Y);
+			LastVelocity = new(currentVelocity.X, currentVelocity.Y);
 		}
 
 		// Check if the player is moving
@@ -69,19 +80,19 @@ public partial class Player : CharacterBody2D
 			_animationPlayer.Stop();
 		}
 
-		// Apply speed to the movement
-		CurrentVelocity *= _currentSpeed;
-
 		// Check if the player is running and apply speed multiplier
 		if (Input.IsActionPressed("run"))
 		{
-			CurrentVelocity *= _speedMultiplier;
+			currentVelocity *= _speedMultiplier;
 		}
 
-		// Set the player's CurrentVelocity and move
-		Velocity = CurrentVelocity;
+		Velocity = currentVelocity;
+
+		// Set the player's currentVelocity and move
 		MoveAndSlide();
 	}
+
+	#region Attack Setup
 
 	private void SetupWeaponAttack(WeaponType weaponType)
     {
@@ -118,11 +129,37 @@ public partial class Player : CharacterBody2D
 		_attackTimer.Stop();
 	}
 
-	private void OnBodyEntered(Node2D body)
-    {
-        if (body is ICollectible collectible)
-        {
-            collectible.Collect();
-        }
-    }
+	#endregion
+
+	#region Item Collection
+
+	// Used for picking up an item that was dropped
+	private void OnAreaEntered(Area2D area)
+	{
+		if (area is ICollectible collectible)
+		{
+			collectible.Collect(this);
+		}
+	}
+
+	#endregion
+
+	#region Take Damage
+
+	public void OnDamageTaken(float damage)
+	{
+		_currentHealth -= damage;
+
+		if (_currentHealth < 0)
+		{
+			Kill();
+		}
+	}
+
+	public void Kill()
+	{
+		GD.Print("Player is dead.");
+	}
+
+	#endregion
 }

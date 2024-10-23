@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class ExperienceGem : Area2D
+public partial class ExperienceGem : Area2D, ICollectible
 {
 	[Export] private int _experienceGranted;
 

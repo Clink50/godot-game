@@ -1,17 +1,23 @@
-[gd_scene load_steps=2 format=3 uid="uid://cquvtk8t7b1lq"]
+[gd_scene load_steps=3 format=3 uid="uid://cquvtk8t7b1lq"]
 
 [ext_resource type="PackedScene" uid="uid://bm186cdhdwxfv" path="res://scenes/map/PalmTree.tscn" id="1_70f06"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ule6h"]
+radius = 3.43808
+height = 7.99904
 
 [node name="PalmTree" instance=ExtResource("1_70f06")]
 
 [node name="Sprite2D" parent="." index="0"]
 region_rect = Rect2(245, 38, 43, 58)
 
-[node name="Hitbox" parent="." index="1"]
-position = Vector2(7, 9.895)
-
-[node name="HitboxComponent" parent="." index="2"]
+[node name="HitboxComponent" parent="." index="1"]
 position = Vector2(1.7, -15)
 
 [node name="CollisionShape2D" parent="HitboxComponent" index="0"]
 position = Vector2(6.75, 17.5)
+
+[node name="CollisionShape2D" parent="." index="2"]
+position = Vector2(7.10408, 8.96531)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_ule6h")
