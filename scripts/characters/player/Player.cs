@@ -2,8 +2,8 @@ using Godot;
 
 public partial class Player : CharacterBody2D
 {
-	[Export] private CharacterResource _characterResource;
 	[Export] private float _speedMultiplier = 2;
+	private PlayerStats _playerStats;
 	private Sprite2D _playerSprite;
 	private AnimationPlayer _animationPlayer;
 	private Timer _attackTimer;
@@ -11,27 +11,16 @@ public partial class Player : CharacterBody2D
 
 	public Vector2 LastVelocity { get; private set; } = Vector2.Right;
 
-	private float _currentHealth;
-	private float _currentRecovery;
-	private float _currentSpeed;
-	private float _currentMight;
-	private float _currentProjectileSpeed;
-
 	public override void _Ready()
 	{
 		_playerSprite = GetNode<Sprite2D>("Sprite2D");
 		_animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+		_playerStats = GetNode<PlayerStats>("PlayerStats");
 
 		_itemDetectionArea = GetNode<Area2D>("ItemCollector");
     	_itemDetectionArea.AreaEntered += OnAreaEntered;
 
-		_currentHealth = _characterResource.MaxHealth;
-		_currentRecovery = _characterResource.Recovery;
-		_currentSpeed = _characterResource.Speed;
-		_currentMight = _characterResource.Might;
-		_currentProjectileSpeed = _characterResource.ProjectileSpeed;
-
-		SetupWeaponAttack(_characterResource.StartingWeapon);
+		SetupWeaponAttack(_playerStats.currentWeapon);
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -49,7 +38,7 @@ public partial class Player : CharacterBody2D
 		}
 
 		// Apply speed to the movement
-		currentVelocity *= _currentSpeed;
+		currentVelocity *= _playerStats.currentSpeed;
 
 		// Store the last non-zero velocity component for direction retention
 		if (horizontalDirection != 0)
@@ -148,9 +137,9 @@ public partial class Player : CharacterBody2D
 
 	public void OnDamageTaken(float damage)
 	{
-		_currentHealth -= damage;
+		_playerStats.currentHealth -= damage;
 
-		if (_currentHealth < 0)
+		if (_playerStats.currentHealth < 0)
 		{
 			Kill();
 		}

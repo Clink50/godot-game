@@ -3,12 +3,12 @@ using Godot;
 [GlobalClass]
 public partial class CharacterResource : Resource
 {
-	private WeaponType _startingWeapon;
+	private WeaponType _currentWeapon;
 	[Export]
-	public WeaponType StartingWeapon
+	public WeaponType CurrentWeapon
 	{
-		get => _startingWeapon;
-		private set => _startingWeapon = value;
+		get => _currentWeapon;
+		private set => _currentWeapon = value;
 	}
 
 	private float _maxHealth;
