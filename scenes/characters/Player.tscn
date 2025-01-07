@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bwccokr3x3o7k"]
+[gd_scene load_steps=15 format=3 uid="uid://bwccokr3x3o7k"]
 
 [ext_resource type="Texture2D" uid="uid://d1yqhgs48c74r" path="res://art/characters/players/main.png" id="1_gwkok"]
 [ext_resource type="Script" path="res://scripts/characters/player/Player.cs" id="1_n08ts"]
@@ -7,12 +7,16 @@
 [ext_resource type="Script" path="res://scripts/resources/characters/player/LevelRangeResource.cs" id="5_wahhx"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2wrhb"]
-radius = 1.21967
-height = 13.5579
+radius = 1.49525
+height = 14.0655
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_y8hla"]
+radius = 5.87633
+height = 28.2634
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_12ier"]
 radius = 5.74753
-height = 28.5214
+height = 28.2669
 
 [sub_resource type="Animation" id="Animation_feh4g"]
 length = 0.001
@@ -146,36 +150,37 @@ experienceCapIncrease = 200
 [node name="Player" type="CharacterBody2D"]
 z_index = 5
 y_sort_enabled = true
-collision_mask = 14
+collision_mask = 4
 motion_mode = 1
 wall_min_slide_angle = 0.174533
 platform_on_leave = 2
 script = ExtResource("1_n08ts")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(0, -11)
+position = Vector2(0, -14)
 texture = ExtResource("1_gwkok")
+offset = Vector2(0, 2.5)
 hframes = 8
 vframes = 8
 frame = 48
 
-[node name="Hitbox" type="CollisionShape2D" parent="."]
-position = Vector2(0, -0.75)
-rotation = 1.5708
+[node name="PlayerCollider" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1.5)
+rotation = -1.57079
 shape = SubResource("CapsuleShape2D_2wrhb")
 
 [node name="Hurtbox" type="Area2D" parent="."]
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
-position = Vector2(-0.00802231, -13.6214)
-shape = SubResource("CapsuleShape2D_12ier")
+position = Vector2(0, -14)
+shape = SubResource("CapsuleShape2D_y8hla")
 
 [node name="ItemCollector" type="Area2D" parent="."]
 collision_mask = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ItemCollector"]
-position = Vector2(-0.00802231, -13.6214)
+position = Vector2(0, -14)
 shape = SubResource("CapsuleShape2D_12ier")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

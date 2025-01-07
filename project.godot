@@ -37,6 +37,10 @@ project/assembly_name="Test RPG"
 
 naming/scene_name_casing=1
 
+[global_group]
+
+Enemies=""
+
 [input]
 
 ui_left={

@@ -1,4 +1,4 @@
 public interface IBaseWeapon
 {
-	public void Activate(Player player);
+    public void Activate(Player player);
 }

@@ -1,4 +1,4 @@
 using Godot;
 
 [GlobalClass]
-public partial class GarlicWeaponResource  : BaseWeaponResource { }
+public partial class GarlicWeaponResource : BaseWeaponResource { }

@@ -1,8 +1,7 @@
-[gd_scene load_steps=14 format=3 uid="uid://10rfc40h71xu"]
+[gd_scene load_steps=13 format=3 uid="uid://10rfc40h71xu"]
 
 [ext_resource type="Script" path="res://scripts/characters/enemies/Bat.cs" id="1_sn0de"]
 [ext_resource type="Texture2D" uid="uid://dn238tm2kfd3v" path="res://art/characters/enemies/bat.png" id="1_uei8r"]
-[ext_resource type="PackedScene" uid="uid://clld82eq1bdn8" path="res://scenes/components/HitboxComponent.tscn" id="2_6n4j3"]
 [ext_resource type="Script" path="res://scripts/DropRateManager.cs" id="5_fm0gl"]
 [ext_resource type="PackedScene" uid="uid://c4jqr1lba4vlv" path="res://scenes/props/Gem.tscn" id="6_pkpry"]
 [ext_resource type="Script" path="res://scripts/resources/DropResource.cs" id="7_oeyox"]
@@ -67,22 +66,10 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("HitboxComponent/CollisionShape2D:position")
+tracks/4/path = NodePath("CollisionShape2D:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [Vector2(0.5, 0), Vector2(0.5, -2.5), Vector2(0.5, -3.87721)]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("CollisionShape2D:position")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
@@ -142,18 +129,6 @@ tracks/3/keys = {
 "update": 1,
 "values": [1, 2, 3]
 }
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("HitboxComponent/CollisionShape2D:position")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(0.5, 0), Vector2(0.5, -2.5), Vector2(0.5, -4)]
-}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_01cy5"]
 _data = {
@@ -167,8 +142,9 @@ name = "Blue Gem"
 item = ExtResource("6_pkpry")
 dropRate = 100.0
 
-[node name="Bat" type="CharacterBody2D"]
+[node name="Bat" type="CharacterBody2D" groups=["Enemies"]]
 z_index = 5
+y_sort_enabled = true
 collision_layer = 2
 collision_mask = 5
 motion_mode = 1
@@ -185,19 +161,16 @@ hframes = 4
 vframes = 4
 frame = 1
 
+[node name="HurtBox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+shape = SubResource("RectangleShape2D_0yep0")
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_01cy5")
 }
 autoplay = "RESET"
-
-[node name="HitboxComponent" parent="." instance=ExtResource("2_6n4j3")]
-collision_layer = 2
-collision_mask = 5
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
-position = Vector2(0.5, 0)
-shape = SubResource("RectangleShape2D_0yep0")
 
 [node name="DropItem" type="Node2D" parent="."]
 script = ExtResource("5_fm0gl")
